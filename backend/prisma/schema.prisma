@@ -1,0 +1,887 @@
+generator client {
+    provider = "prisma-client"
+    output   = "./generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+// ================================
+// MODÈLES D'AUTHENTIFICATION
+// ================================
+
+// Utilisateur principal (propriétaire du compte)
+model User {
+    id           String     @id @default(cuid())
+    email        String     @unique
+    name         String?
+    passwordHash String
+    avatar       String?
+    isVerified   Boolean    @default(false)
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    lastLogin    DateTime?
+    globalRole   GlobalRole @default(USER)
+
+    // Propriétaire de ces entreprises
+    ownedCompanies CompanyOwner[]
+
+    // Peut aussi être employé dans d'autres entreprises
+    employeeProfiles Employee[]
+
+    // Sessions utilisateur
+    sessions Session[]
+}
+
+// Session utilisateur
+model Session {
+    id        String   @id @default(cuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    token     String   @unique
+    ipAddress String?
+    userAgent String?
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+
+    @@index([userId])
+}
+
+// ================================
+// MODÈLES MULTI-TENANT
+// ================================
+
+// Relation propriétaire entreprise (pour les Users)
+model CompanyOwner {
+    id        String  @id @default(cuid())
+    user      User    @relation(fields: [userId], references: [id])
+    userId    String
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    // Rôle du propriétaire dans cette entreprise
+    role     CompanyRole @default(OWNER)
+    isActive Boolean     @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, companyId])
+}
+
+// Entreprise (tenant)
+model Company {
+    id         String @id @default(cuid())
+    entityName String
+    country    String
+    currency   String
+    flag       String
+    slug       String @unique // Pour les URLs
+
+    // Informations de base
+    logo      String?
+    activity  String? // Activité Principale
+    sector    String? // Secteur d'activité
+    legalForm String? // Forme Juridique
+    capital   String? // Capital Social
+
+    // Fiscalité & Légal
+    ncc     String? // Numéro NCC
+    rccm    String? // Numéro RCCM
+    manager String? // Gérant / DG
+    tvaRate Float?  @default(18.0)
+
+    // Coordonnées
+    address String?
+    city    String?
+    bp      String? // Boîte Postale
+    phone   String?
+    email   String?
+
+    primaryColor   String?
+    secondaryColor String?
+    domain         String? @unique // Domaine personnalisé
+
+    // Statut de l'entreprise
+    status           CompanyStatus     @default(ACTIVE)
+    subscriptionPlan SubscriptionPlan? @default(FREE)
+
+    // Propriétaires
+    owners CompanyOwner[]
+
+    // Employés
+    employees Employee[]
+
+    // Données métier
+    stockItems      StockItem[]
+    stockCategories StockCategory[]
+    suppliers       Supplier[]
+    stockMovements  StockMovement[]
+    contacts        ContactCrm[]
+    deals           Deal[]
+    quotes          Quote[]
+    invoices        Invoice[]
+    purchaseOrders  PurchaseOrder[]
+    tasks           Task[]
+    attendances     Attendance[]
+    leaveRequests   LeaveRequest[]
+    payslips        Payslip[]
+    accounting      AccountingEntry[]
+    jobOpenings     JobOpening[]
+    dictionaries    Dictionary[]
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+    printerSettings PrinterSettings?
+
+    // Index pour la recherche
+    @@index([entityName])
+    @@index([country])
+}
+
+// Employé (peut être lié à un User ou non)
+model Employee {
+    id           String         @id @default(cuid())
+    matricule    String
+    fullName     String
+    position     String
+    department   String
+    email        String
+    phone        String
+    address      String
+    baseSalary   Float
+    status       EmployeeStatus @default(ACTIVE)
+    contractType ContractType
+
+    // Si l'employé a un compte utilisateur
+    user   User?   @relation(fields: [userId], references: [id])
+    userId String?
+
+    // Entreprise à laquelle il appartient
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    // Rôle et permissions
+    role        EmployeeRole @default(EMPLOYEE)
+    permissions Permission[] // Permissions spécifiques
+    accessLevel AccessLevel  @default(BASIC)
+
+    // Informations de connexion (si pas de compte User)
+    temporaryPassword          String?
+    temporaryPasswordExpiresAt DateTime?
+    lastLogin                  DateTime?
+
+    // Données RH
+    joinDate       DateTime
+    leaveDate      DateTime?
+    payslips       Payslip[]
+    attendances    Attendance[]
+    leaveRequests  LeaveRequest[]
+    assignedTasks  Task[]
+    faceDescriptor String? // Signature biométrique (JSON stringified array)
+
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    customRole Role?    @relation(fields: [roleId], references: [id])
+    roleId     String?
+
+    // Contraintes d'unicité
+    @@unique([companyId, matricule])
+    @@unique([companyId, email])
+    // Index pour la recherche
+    @@index([companyId, status])
+    @@index([companyId, department])
+}
+
+// ================================
+// MODÈLES DE PERMISSIONS
+// ================================
+
+// Modèle pour gérer les permissions spécifiques
+model Permission {
+    id          String @id @default(cuid())
+    code        String @unique // ex: "stock:read", "stock:write", "hr:read"
+    name        String
+    description String
+    category    String // "stock", "hr", "crm", "accounting"
+
+    employees Employee[]
+    roles     RolePermission[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Rôles prédéfinis pour les employés
+model Role {
+    id          String           @id @default(cuid())
+    name        String           @unique // "Admin", "Manager", "Viewer"
+    description String
+    level       Int // 1 = bas, 10 = élevé
+    isDefault   Boolean          @default(false)
+    permissions RolePermission[]
+    employees   Employee[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Relation Role-Permission
+model RolePermission {
+    id           String     @id @default(cuid())
+    role         Role       @relation(fields: [roleId], references: [id])
+    roleId       String
+    permission   Permission @relation(fields: [permissionId], references: [id])
+    permissionId String
+
+    createdAt DateTime @default(now())
+
+    @@unique([roleId, permissionId])
+}
+
+// ================================
+// MODÈLES DE CONTENU (GLOBAUX)
+// ================================
+
+// SEO (Unique pour le site)
+model Seo {
+    id              String  @id @default(cuid())
+    metaTitle       String
+    metaDescription String
+    metaKeywords    String
+    ogImage         String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Hero
+model Hero {
+    id       String  @id @default(cuid())
+    title    String
+    subtitle String
+    tagline  String
+    imageUrl String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// About
+model About {
+    id          String @id @default(cuid())
+    title       String
+    description String
+    vision      String
+    mission     String
+    values      String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Contact
+model Contact {
+    id      String @id @default(cuid())
+    email   String
+    phone   String
+    address String
+    hours   String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Careers
+model Careers {
+    id           String       @id @default(cuid())
+    title        String
+    subtitle     String
+    description  String
+    contactEmail String
+    jobOpenings  JobOpening[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Realizations
+model Realizations {
+    id      String        @id @default(cuid())
+    works   String[]
+    clients String[]
+    gallery GalleryItem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Galerie
+model GalleryItem {
+    id             String       @id @default(cuid())
+    caption        String
+    category       String
+    imageUrl       String?
+    realizations   Realizations @relation(fields: [realizationsId], references: [id])
+    realizationsId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Statistiques
+model Stat {
+    id    String @id @default(cuid())
+    value String
+    label String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Lieux d'implantation
+model Location {
+    id      String @id @default(cuid())
+    country String
+    flag    String
+    year    String
+    status  String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Services (partagés entre entreprises)
+model Service {
+    id          String   @id @default(cuid())
+    title       String
+    description String
+    iconName    String
+    features    String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// ================================
+// MODÈLES MÉTIER (inchangés mais avec companyId)
+// ================================
+
+// Stock
+model StockItem {
+    id          String  @id @default(cuid())
+    type        String
+    ref         String
+    barcode     String? // Nouveau: Code-barres
+    name        String
+    description String? // Nouveau: Description détaillée
+    brand       String? // Nouveau: Marque
+
+    // Catégorie
+    category    String? // Nom libre
+    categoryRel StockCategory? @relation(fields: [categoryId], references: [id])
+    categoryId  String?
+
+    // Fournisseur par défaut
+    supplier   Supplier? @relation(fields: [supplierId], references: [id])
+    supplierId String?
+
+    quantity          Int
+    unit              String
+    minThreshold      Int
+    location          String
+    value             Float
+    sellingPrice      Float
+    status            String
+    imageUrl          String? // Nouveau: Photo du produit
+    batchNumber       String? // Numéro de lot
+    expiryDate        DateTime? // Date d'expiration
+    manufacturingDate DateTime? // Date de fabrication
+    company           Company             @relation(fields: [companyId], references: [id])
+    companyId         String
+    movements         StockMovementItem[]
+    tasks             Task[]
+
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @updatedAt
+    purchaseOrderItems PurchaseOrderItem[]
+
+    @@unique([companyId, ref])
+    @@index([barcode])
+}
+
+model StockCategory {
+    id        String      @id @default(cuid())
+    name      String
+    company   Company     @relation(fields: [companyId], references: [id])
+    companyId String
+    items     StockItem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([companyId, name])
+}
+
+// Fournisseurs
+model Supplier {
+    id             String          @id @default(cuid())
+    name           String
+    contactName    String
+    email          String
+    phone          String
+    address        String
+    category       String
+    company        Company         @relation(fields: [companyId], references: [id])
+    companyId      String
+    stockMovements StockMovement[]
+
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
+    stockItems     StockItem[]
+    purchaseOrders PurchaseOrder[]
+    tasks          Task[]
+}
+
+// Mouvements de stock
+model StockMovement {
+    id          String              @id @default(cuid())
+    type        String
+    reference   String
+    date        DateTime
+    partnerId   String
+    partnerName String
+    status      String
+    totalValue  Float
+    company     Company             @relation(fields: [companyId], references: [id])
+    companyId   String
+    supplier    Supplier?           @relation(fields: [supplierId], references: [id])
+    supplierId  String?
+    items       StockMovementItem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([companyId, reference])
+}
+
+// Ligne de mouvement de stock
+model StockMovementItem {
+    id              String        @id @default(cuid())
+    stockMovement   StockMovement @relation(fields: [stockMovementId], references: [id])
+    stockMovementId String
+    stockItem       StockItem     @relation(fields: [stockItemId], references: [id])
+    stockItemId     String
+    description     String
+    quantity        Int
+    unitPrice       Float
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Bulletins de paie
+model Payslip {
+    id              String   @id @default(cuid())
+    employee        Employee @relation(fields: [employeeId], references: [id])
+    employeeId      String
+    employeeName    String
+    period          String
+    date            DateTime
+    baseSalary      Float
+    transportPrime  Float
+    housingPrime    Float
+    otherBonuses    Float
+    grossSalary     Float
+    cnpsDeduction   Float
+    taxDeduction    Float
+    otherDeductions Float
+    netSalary       Float
+    status          String
+    company         Company  @relation(fields: [companyId], references: [id])
+    companyId       String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Écritures comptables
+model AccountingEntry {
+    id        String   @id @default(cuid())
+    date      DateTime
+    ref       String
+    label     String
+    category  String
+    amount    Float
+    type      String
+    status    String
+    company   Company  @relation(fields: [companyId], references: [id])
+    companyId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Devis
+model Quote {
+    id          String      @id @default(cuid())
+    reference   String
+    clientId    String
+    clientName  String
+    date        DateTime
+    validUntil  DateTime
+    status      String
+    totalAmount Float
+    company     Company     @relation(fields: [companyId], references: [id])
+    companyId   String
+    items       QuoteItem[]
+
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
+    contactCrm   ContactCrm? @relation(fields: [contactCrmId], references: [id])
+    contactCrmId String?
+    invoices     Invoice[]
+
+    @@unique([companyId, reference])
+}
+
+// Ligne de devis
+model QuoteItem {
+    id          String @id @default(cuid())
+    quote       Quote  @relation(fields: [quoteId], references: [id])
+    quoteId     String
+    description String
+    quantity    Int
+    unitPrice   Float
+    total       Float
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// CRM - Contacts
+model ContactCrm {
+    id          String    @id @default(cuid())
+    companyName String
+    contactName String
+    email       String
+    phone       String
+    address     String
+    type        String
+    status      String
+    lastContact DateTime
+    industry    String
+    deals       Deal[]
+    quotes      Quote[]
+    invoices    Invoice[]
+    tasks       Task[]
+    company     Company   @relation(fields: [companyId], references: [id])
+    companyId   String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// CRM - Opportunités
+model Deal {
+    id          String     @id @default(cuid())
+    title       String
+    contact     ContactCrm @relation(fields: [contactId], references: [id])
+    contactId   String
+    amount      Float
+    stage       String
+    probability Int
+    closingDate DateTime
+    company     Company    @relation(fields: [companyId], references: [id])
+    companyId   String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Offres d'emploi
+model JobOpening {
+    id          String  @id @default(cuid())
+    title       String
+    location    String
+    type        String
+    description String
+    status      String
+    careers     Careers @relation(fields: [careersId], references: [id])
+    careersId   String
+    company     Company @relation(fields: [companyId], references: [id])
+    companyId   String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// ================================
+// NOUVEAUX MODÈLES (Step 424)
+// ================================
+
+// Factures
+model Invoice {
+    id          String   @id @default(cuid())
+    reference   String
+    clientId    String?
+    clientName  String
+    date        DateTime
+    dueDate     DateTime
+    status      String // 'Draft', 'Sent', 'Paid', 'Partially Paid', 'Overdue', 'Cancelled'
+    totalAmount Float
+    paidAmount  Float    @default(0)
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    // Source (Optionnel)
+    quote   Quote?  @relation(fields: [quoteId], references: [id])
+    quoteId String?
+
+    items    InvoiceItem[]
+    payments Payment[]
+
+    contactCrm   ContactCrm? @relation(fields: [contactCrmId], references: [id])
+    contactCrmId String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([companyId, reference])
+}
+
+model InvoiceItem {
+    id          String  @id @default(cuid())
+    invoice     Invoice @relation(fields: [invoiceId], references: [id])
+    invoiceId   String
+    description String
+    quantity    Int
+    unitPrice   Float
+    total       Float
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Paiements
+model Payment {
+    id        String   @id @default(cuid())
+    reference String?
+    amount    Float
+    date      DateTime
+    method    String // 'Cash', 'Check', 'Transfer', 'MobileMoney'
+    notes     String?
+
+    invoice   Invoice @relation(fields: [invoiceId], references: [id])
+    invoiceId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Commandes Fournisseurs
+model PurchaseOrder {
+    id           String    @id @default(cuid())
+    reference    String
+    date         DateTime
+    expectedDate DateTime?
+    status       String // 'Draft', 'Ordered', 'Received', 'Cancelled'
+    totalAmount  Float
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    supplier   Supplier @relation(fields: [supplierId], references: [id])
+    supplierId String
+
+    items PurchaseOrderItem[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([companyId, reference])
+}
+
+model PurchaseOrderItem {
+    id              String        @id @default(cuid())
+    purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+    purchaseOrderId String
+
+    stockItem   StockItem? @relation(fields: [stockItemId], references: [id])
+    stockItemId String?
+
+    description String // Nom du produit ou service
+    quantity    Int
+    unitPrice   Float
+    total       Float
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// RH - Pointage
+model Attendance {
+    id       String    @id @default(cuid())
+    date     DateTime
+    checkIn  DateTime?
+    checkOut DateTime?
+    status   String // 'Present', 'Absent', 'Late', 'Excused'
+    notes    String?
+
+    employee   Employee @relation(fields: [employeeId], references: [id])
+    employeeId String
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([employeeId, date])
+}
+
+// RH - Demandes de Congés
+model LeaveRequest {
+    id         String    @id @default(cuid())
+    type       String // 'Paid', 'Sick', 'Unpaid', 'Maternity', 'Other'
+    startDate  DateTime
+    endDate    DateTime
+    reason     String?
+    status     String // 'Pending', 'Approved', 'Rejected'
+    approvedAt DateTime?
+
+    employee   Employee @relation(fields: [employeeId], references: [id])
+    employeeId String
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Tâches & Projets
+model Task {
+    id          String    @id @default(cuid())
+    title       String
+    description String?
+    priority    String // 'Low', 'Medium', 'High', 'Urgent'
+    status      String // 'Todo', 'In Progress', 'Done', 'Archived'
+    dueDate     DateTime?
+
+    assignedTo   Employee? @relation(fields: [assignedToId], references: [id])
+    assignedToId String?
+
+    // Relations optionnelles (Tagging)
+    client     ContactCrm? @relation(fields: [clientId], references: [id])
+    clientId   String?
+    supplier   Supplier?   @relation(fields: [supplierId], references: [id])
+    supplierId String?
+    product    StockItem?  @relation(fields: [productId], references: [id])
+    productId  String?
+
+    // Nouveaux champs
+    category       String?
+    tags           String[]
+    startDate      DateTime?
+    completedAt    DateTime?
+    estimatedHours Float?
+    actualHours    Float?
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Dictionnaire de données (Listes déroulantes paramétrables)
+model Dictionary {
+    id        String  @id @default(cuid())
+    type      String // ex: 'BRAND', 'UNIT', 'DEPARTMENT', 'EXPENSE_CATEGORY'
+    value     String // ex: 'Samsung', 'Kg', 'Marketing'
+    code      String? // Code optionnel
+    color     String? // Couleur d'affichage optionnelle
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([companyId, type, value])
+    @@index([companyId, type])
+}
+
+// Configuration des imprimantes (par entreprise)
+model PrinterSettings {
+    id              String  @id @default(cuid())
+    documentPrinter String? // Nom de l'imprimante A4 par défaut
+    barcodePrinter  String? // Nom de l'imprimante thermique
+    labelWidth      Int     @default(50) // Largeur étiquette (mm)
+    labelHeight     Int     @default(30) // Hauteur étiquette (mm)
+
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String  @unique
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum GlobalRole {
+    SUPER_ADMIN
+    USER
+}
+
+// ================================
+// ENUMS
+// ================================
+
+enum CompanyStatus {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+}
+
+enum CompanyRole {
+    OWNER
+    ADMIN
+}
+
+enum EmployeeStatus {
+    ACTIVE
+    INACTIVE
+    ON_LEAVE
+    TERMINATED
+}
+
+enum ContractType {
+    CDI
+    CDD
+    FREELANCE
+    INTERN
+}
+
+enum EmployeeRole {
+    SUPER_ADMIN // Accès à tout (User propriétaire)
+    ADMIN // Admin de l'entreprise
+    MANAGER // Gestionnaire département
+    EMPLOYEE // Employé standard
+    VIEWER // Lecture seule
+    GUEST // Accès limité
+}
+
+enum AccessLevel {
+    NONE
+    BASIC
+    STANDARD
+    PREMIUM
+    ADMIN
+}
+
+enum SubscriptionPlan {
+    FREE
+    STARTER
+    PROFESSIONAL
+    ENTERPRISE
+}
