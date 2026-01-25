@@ -410,7 +410,11 @@ export type CompanyWhereInput = {
   accounting?: Prisma.AccountingEntryListRelationFilter
   jobOpenings?: Prisma.JobOpeningListRelationFilter
   dictionaries?: Prisma.DictionaryListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
   printerSettings?: Prisma.XOR<Prisma.PrinterSettingsNullableScalarRelationFilter, Prisma.PrinterSettingsWhereInput> | null
+  webhooks?: Prisma.WebhookListRelationFilter
+  apiKeys?: Prisma.ApiKeyListRelationFilter
+  fileResources?: Prisma.FileResourceListRelationFilter
 }
 
 export type CompanyOrderByWithRelationInput = {
@@ -459,7 +463,11 @@ export type CompanyOrderByWithRelationInput = {
   accounting?: Prisma.AccountingEntryOrderByRelationAggregateInput
   jobOpenings?: Prisma.JobOpeningOrderByRelationAggregateInput
   dictionaries?: Prisma.DictionaryOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   printerSettings?: Prisma.PrinterSettingsOrderByWithRelationInput
+  webhooks?: Prisma.WebhookOrderByRelationAggregateInput
+  apiKeys?: Prisma.ApiKeyOrderByRelationAggregateInput
+  fileResources?: Prisma.FileResourceOrderByRelationAggregateInput
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -511,7 +519,11 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   accounting?: Prisma.AccountingEntryListRelationFilter
   jobOpenings?: Prisma.JobOpeningListRelationFilter
   dictionaries?: Prisma.DictionaryListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
   printerSettings?: Prisma.XOR<Prisma.PrinterSettingsNullableScalarRelationFilter, Prisma.PrinterSettingsWhereInput> | null
+  webhooks?: Prisma.WebhookListRelationFilter
+  apiKeys?: Prisma.ApiKeyListRelationFilter
+  fileResources?: Prisma.FileResourceListRelationFilter
 }, "id" | "slug" | "domain">
 
 export type CompanyOrderByWithAggregationInput = {
@@ -628,7 +640,11 @@ export type CompanyCreateInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateInput = {
@@ -677,7 +693,11 @@ export type CompanyUncheckedCreateInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUpdateInput = {
@@ -726,7 +746,11 @@ export type CompanyUpdateInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateInput = {
@@ -775,7 +799,11 @@ export type CompanyUncheckedUpdateInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateManyInput = {
@@ -969,6 +997,11 @@ export type CompanyMinOrderByAggregateInput = {
 
 export type CompanySumOrderByAggregateInput = {
   tvaRate?: Prisma.SortOrder
+}
+
+export type CompanyNullableScalarRelationFilter = {
+  is?: Prisma.CompanyWhereInput | null
+  isNot?: Prisma.CompanyWhereInput | null
 }
 
 export type CompanyCreateNestedOneWithoutOwnersInput = {
@@ -1253,6 +1286,64 @@ export type CompanyUpdateOneRequiredWithoutPrinterSettingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutPrinterSettingsInput, Prisma.CompanyUpdateWithoutPrinterSettingsInput>, Prisma.CompanyUncheckedUpdateWithoutPrinterSettingsInput>
 }
 
+export type CompanyCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.CompanyUpsertWithoutAuditLogsInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.CompanyUpdateWithoutAuditLogsInput>, Prisma.CompanyUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type CompanyCreateNestedOneWithoutWebhooksInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutWebhooksInput, Prisma.CompanyUncheckedCreateWithoutWebhooksInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutWebhooksInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutWebhooksNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutWebhooksInput, Prisma.CompanyUncheckedCreateWithoutWebhooksInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutWebhooksInput
+  upsert?: Prisma.CompanyUpsertWithoutWebhooksInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutWebhooksInput, Prisma.CompanyUpdateWithoutWebhooksInput>, Prisma.CompanyUncheckedUpdateWithoutWebhooksInput>
+}
+
+export type CompanyCreateNestedOneWithoutApiKeysInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutApiKeysInput, Prisma.CompanyUncheckedCreateWithoutApiKeysInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutApiKeysInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutApiKeysNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutApiKeysInput, Prisma.CompanyUncheckedCreateWithoutApiKeysInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutApiKeysInput
+  upsert?: Prisma.CompanyUpsertWithoutApiKeysInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutApiKeysInput, Prisma.CompanyUpdateWithoutApiKeysInput>, Prisma.CompanyUncheckedUpdateWithoutApiKeysInput>
+}
+
+export type CompanyCreateNestedOneWithoutFileResourcesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutFileResourcesInput, Prisma.CompanyUncheckedCreateWithoutFileResourcesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutFileResourcesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutFileResourcesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutFileResourcesInput, Prisma.CompanyUncheckedCreateWithoutFileResourcesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutFileResourcesInput
+  upsert?: Prisma.CompanyUpsertWithoutFileResourcesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutFileResourcesInput, Prisma.CompanyUpdateWithoutFileResourcesInput>, Prisma.CompanyUncheckedUpdateWithoutFileResourcesInput>
+}
+
 export type CompanyCreateWithoutOwnersInput = {
   id?: string
   entityName: string
@@ -1298,7 +1389,11 @@ export type CompanyCreateWithoutOwnersInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutOwnersInput = {
@@ -1346,7 +1441,11 @@ export type CompanyUncheckedCreateWithoutOwnersInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutOwnersInput = {
@@ -1410,7 +1509,11 @@ export type CompanyUpdateWithoutOwnersInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutOwnersInput = {
@@ -1458,7 +1561,11 @@ export type CompanyUncheckedUpdateWithoutOwnersInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutEmployeesInput = {
@@ -1506,7 +1613,11 @@ export type CompanyCreateWithoutEmployeesInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutEmployeesInput = {
@@ -1554,7 +1665,11 @@ export type CompanyUncheckedCreateWithoutEmployeesInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutEmployeesInput = {
@@ -1618,7 +1733,11 @@ export type CompanyUpdateWithoutEmployeesInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutEmployeesInput = {
@@ -1666,7 +1785,11 @@ export type CompanyUncheckedUpdateWithoutEmployeesInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutStockItemsInput = {
@@ -1714,7 +1837,11 @@ export type CompanyCreateWithoutStockItemsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutStockItemsInput = {
@@ -1762,7 +1889,11 @@ export type CompanyUncheckedCreateWithoutStockItemsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutStockItemsInput = {
@@ -1826,7 +1957,11 @@ export type CompanyUpdateWithoutStockItemsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutStockItemsInput = {
@@ -1874,7 +2009,11 @@ export type CompanyUncheckedUpdateWithoutStockItemsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutStockCategoriesInput = {
@@ -1922,7 +2061,11 @@ export type CompanyCreateWithoutStockCategoriesInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutStockCategoriesInput = {
@@ -1970,7 +2113,11 @@ export type CompanyUncheckedCreateWithoutStockCategoriesInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutStockCategoriesInput = {
@@ -2034,7 +2181,11 @@ export type CompanyUpdateWithoutStockCategoriesInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutStockCategoriesInput = {
@@ -2082,7 +2233,11 @@ export type CompanyUncheckedUpdateWithoutStockCategoriesInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutSuppliersInput = {
@@ -2130,7 +2285,11 @@ export type CompanyCreateWithoutSuppliersInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSuppliersInput = {
@@ -2178,7 +2337,11 @@ export type CompanyUncheckedCreateWithoutSuppliersInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSuppliersInput = {
@@ -2242,7 +2405,11 @@ export type CompanyUpdateWithoutSuppliersInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSuppliersInput = {
@@ -2290,7 +2457,11 @@ export type CompanyUncheckedUpdateWithoutSuppliersInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutStockMovementsInput = {
@@ -2338,7 +2509,11 @@ export type CompanyCreateWithoutStockMovementsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutStockMovementsInput = {
@@ -2386,7 +2561,11 @@ export type CompanyUncheckedCreateWithoutStockMovementsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutStockMovementsInput = {
@@ -2450,7 +2629,11 @@ export type CompanyUpdateWithoutStockMovementsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutStockMovementsInput = {
@@ -2498,7 +2681,11 @@ export type CompanyUncheckedUpdateWithoutStockMovementsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutPayslipsInput = {
@@ -2546,7 +2733,11 @@ export type CompanyCreateWithoutPayslipsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutPayslipsInput = {
@@ -2594,7 +2785,11 @@ export type CompanyUncheckedCreateWithoutPayslipsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutPayslipsInput = {
@@ -2658,7 +2853,11 @@ export type CompanyUpdateWithoutPayslipsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutPayslipsInput = {
@@ -2706,7 +2905,11 @@ export type CompanyUncheckedUpdateWithoutPayslipsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAccountingInput = {
@@ -2754,7 +2957,11 @@ export type CompanyCreateWithoutAccountingInput = {
   payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAccountingInput = {
@@ -2802,7 +3009,11 @@ export type CompanyUncheckedCreateWithoutAccountingInput = {
   payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAccountingInput = {
@@ -2866,7 +3077,11 @@ export type CompanyUpdateWithoutAccountingInput = {
   payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAccountingInput = {
@@ -2914,7 +3129,11 @@ export type CompanyUncheckedUpdateWithoutAccountingInput = {
   payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutQuotesInput = {
@@ -2962,7 +3181,11 @@ export type CompanyCreateWithoutQuotesInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutQuotesInput = {
@@ -3010,7 +3233,11 @@ export type CompanyUncheckedCreateWithoutQuotesInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutQuotesInput = {
@@ -3074,7 +3301,11 @@ export type CompanyUpdateWithoutQuotesInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutQuotesInput = {
@@ -3122,7 +3353,11 @@ export type CompanyUncheckedUpdateWithoutQuotesInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutContactsInput = {
@@ -3170,7 +3405,11 @@ export type CompanyCreateWithoutContactsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutContactsInput = {
@@ -3218,7 +3457,11 @@ export type CompanyUncheckedCreateWithoutContactsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutContactsInput = {
@@ -3282,7 +3525,11 @@ export type CompanyUpdateWithoutContactsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutContactsInput = {
@@ -3330,7 +3577,11 @@ export type CompanyUncheckedUpdateWithoutContactsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutDealsInput = {
@@ -3378,7 +3629,11 @@ export type CompanyCreateWithoutDealsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutDealsInput = {
@@ -3426,7 +3681,11 @@ export type CompanyUncheckedCreateWithoutDealsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutDealsInput = {
@@ -3490,7 +3749,11 @@ export type CompanyUpdateWithoutDealsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutDealsInput = {
@@ -3538,7 +3801,11 @@ export type CompanyUncheckedUpdateWithoutDealsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutJobOpeningsInput = {
@@ -3586,7 +3853,11 @@ export type CompanyCreateWithoutJobOpeningsInput = {
   payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutJobOpeningsInput = {
@@ -3634,7 +3905,11 @@ export type CompanyUncheckedCreateWithoutJobOpeningsInput = {
   payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutJobOpeningsInput = {
@@ -3698,7 +3973,11 @@ export type CompanyUpdateWithoutJobOpeningsInput = {
   payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutJobOpeningsInput = {
@@ -3746,7 +4025,11 @@ export type CompanyUncheckedUpdateWithoutJobOpeningsInput = {
   payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutInvoicesInput = {
@@ -3794,7 +4077,11 @@ export type CompanyCreateWithoutInvoicesInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutInvoicesInput = {
@@ -3842,7 +4129,11 @@ export type CompanyUncheckedCreateWithoutInvoicesInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutInvoicesInput = {
@@ -3906,7 +4197,11 @@ export type CompanyUpdateWithoutInvoicesInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutInvoicesInput = {
@@ -3954,7 +4249,11 @@ export type CompanyUncheckedUpdateWithoutInvoicesInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutPurchaseOrdersInput = {
@@ -4002,7 +4301,11 @@ export type CompanyCreateWithoutPurchaseOrdersInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -4050,7 +4353,11 @@ export type CompanyUncheckedCreateWithoutPurchaseOrdersInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -4114,7 +4421,11 @@ export type CompanyUpdateWithoutPurchaseOrdersInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -4162,7 +4473,11 @@ export type CompanyUncheckedUpdateWithoutPurchaseOrdersInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutAttendancesInput = {
@@ -4210,7 +4525,11 @@ export type CompanyCreateWithoutAttendancesInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutAttendancesInput = {
@@ -4258,7 +4577,11 @@ export type CompanyUncheckedCreateWithoutAttendancesInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutAttendancesInput = {
@@ -4322,7 +4645,11 @@ export type CompanyUpdateWithoutAttendancesInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutAttendancesInput = {
@@ -4370,7 +4697,11 @@ export type CompanyUncheckedUpdateWithoutAttendancesInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutLeaveRequestsInput = {
@@ -4418,7 +4749,11 @@ export type CompanyCreateWithoutLeaveRequestsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutLeaveRequestsInput = {
@@ -4466,7 +4801,11 @@ export type CompanyUncheckedCreateWithoutLeaveRequestsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutLeaveRequestsInput = {
@@ -4530,7 +4869,11 @@ export type CompanyUpdateWithoutLeaveRequestsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -4578,7 +4921,11 @@ export type CompanyUncheckedUpdateWithoutLeaveRequestsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutTasksInput = {
@@ -4626,7 +4973,11 @@ export type CompanyCreateWithoutTasksInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutTasksInput = {
@@ -4674,7 +5025,11 @@ export type CompanyUncheckedCreateWithoutTasksInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutTasksInput = {
@@ -4738,7 +5093,11 @@ export type CompanyUpdateWithoutTasksInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutTasksInput = {
@@ -4786,7 +5145,11 @@ export type CompanyUncheckedUpdateWithoutTasksInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutDictionariesInput = {
@@ -4834,7 +5197,11 @@ export type CompanyCreateWithoutDictionariesInput = {
   payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutDictionariesInput = {
@@ -4882,7 +5249,11 @@ export type CompanyUncheckedCreateWithoutDictionariesInput = {
   payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
   printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutDictionariesInput = {
@@ -4946,7 +5317,11 @@ export type CompanyUpdateWithoutDictionariesInput = {
   payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutDictionariesInput = {
@@ -4994,7 +5369,11 @@ export type CompanyUncheckedUpdateWithoutDictionariesInput = {
   payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
   printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyCreateWithoutPrinterSettingsInput = {
@@ -5043,6 +5422,10 @@ export type CompanyCreateWithoutPrinterSettingsInput = {
   accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutPrinterSettingsInput = {
@@ -5091,6 +5474,10 @@ export type CompanyUncheckedCreateWithoutPrinterSettingsInput = {
   accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
   jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
   dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutPrinterSettingsInput = {
@@ -5155,6 +5542,10 @@ export type CompanyUpdateWithoutPrinterSettingsInput = {
   accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutPrinterSettingsInput = {
@@ -5203,6 +5594,906 @@ export type CompanyUncheckedUpdateWithoutPrinterSettingsInput = {
   accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
   jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
   dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutAuditLogsInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmUncheckedCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealUncheckedCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteUncheckedCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type CompanyUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutAuditLogsInput, Prisma.CompanyUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAuditLogsInput, Prisma.CompanyUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutAuditLogsInput, Prisma.CompanyUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type CompanyUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUncheckedUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUncheckedUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUncheckedUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutWebhooksInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutWebhooksInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmUncheckedCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealUncheckedCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteUncheckedCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutWebhooksInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutWebhooksInput, Prisma.CompanyUncheckedCreateWithoutWebhooksInput>
+}
+
+export type CompanyUpsertWithoutWebhooksInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutWebhooksInput, Prisma.CompanyUncheckedUpdateWithoutWebhooksInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutWebhooksInput, Prisma.CompanyUncheckedCreateWithoutWebhooksInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutWebhooksInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutWebhooksInput, Prisma.CompanyUncheckedUpdateWithoutWebhooksInput>
+}
+
+export type CompanyUpdateWithoutWebhooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutWebhooksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUncheckedUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUncheckedUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUncheckedUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutApiKeysInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutApiKeysInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmUncheckedCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealUncheckedCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteUncheckedCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  fileResources?: Prisma.FileResourceUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutApiKeysInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutApiKeysInput, Prisma.CompanyUncheckedCreateWithoutApiKeysInput>
+}
+
+export type CompanyUpsertWithoutApiKeysInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutApiKeysInput, Prisma.CompanyUncheckedUpdateWithoutApiKeysInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutApiKeysInput, Prisma.CompanyUncheckedCreateWithoutApiKeysInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutApiKeysInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutApiKeysInput, Prisma.CompanyUncheckedUpdateWithoutApiKeysInput>
+}
+
+export type CompanyUpdateWithoutApiKeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutApiKeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUncheckedUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUncheckedUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUncheckedUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  fileResources?: Prisma.FileResourceUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutFileResourcesInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutFileResourcesInput = {
+  id?: string
+  entityName: string
+  country: string
+  currency: string
+  flag: string
+  slug: string
+  logo?: string | null
+  activity?: string | null
+  sector?: string | null
+  legalForm?: string | null
+  capital?: string | null
+  ncc?: string | null
+  rccm?: string | null
+  manager?: string | null
+  tvaRate?: number | null
+  address?: string | null
+  city?: string | null
+  bp?: string | null
+  phone?: string | null
+  email?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  domain?: string | null
+  status?: $Enums.CompanyStatus
+  subscriptionPlan?: $Enums.SubscriptionPlan | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutCompanyInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutCompanyInput
+  stockCategories?: Prisma.StockCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutCompanyInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+  contacts?: Prisma.ContactCrmUncheckedCreateNestedManyWithoutCompanyInput
+  deals?: Prisma.DealUncheckedCreateNestedManyWithoutCompanyInput
+  quotes?: Prisma.QuoteUncheckedCreateNestedManyWithoutCompanyInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCompanyInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutCompanyInput
+  payslips?: Prisma.PayslipUncheckedCreateNestedManyWithoutCompanyInput
+  accounting?: Prisma.AccountingEntryUncheckedCreateNestedManyWithoutCompanyInput
+  jobOpenings?: Prisma.JobOpeningUncheckedCreateNestedManyWithoutCompanyInput
+  dictionaries?: Prisma.DictionaryUncheckedCreateNestedManyWithoutCompanyInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedCreateNestedOneWithoutCompanyInput
+  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutCompanyInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutFileResourcesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutFileResourcesInput, Prisma.CompanyUncheckedCreateWithoutFileResourcesInput>
+}
+
+export type CompanyUpsertWithoutFileResourcesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutFileResourcesInput, Prisma.CompanyUncheckedUpdateWithoutFileResourcesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutFileResourcesInput, Prisma.CompanyUncheckedCreateWithoutFileResourcesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutFileResourcesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutFileResourcesInput, Prisma.CompanyUncheckedUpdateWithoutFileResourcesInput>
+}
+
+export type CompanyUpdateWithoutFileResourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutFileResourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  entityName?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  flag?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalForm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capital?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ncc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rccm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manager?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvaRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  subscriptionPlan?: Prisma.NullableEnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutCompanyNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutCompanyNestedInput
+  stockCategories?: Prisma.StockCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  contacts?: Prisma.ContactCrmUncheckedUpdateManyWithoutCompanyNestedInput
+  deals?: Prisma.DealUncheckedUpdateManyWithoutCompanyNestedInput
+  quotes?: Prisma.QuoteUncheckedUpdateManyWithoutCompanyNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCompanyNestedInput
+  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  payslips?: Prisma.PayslipUncheckedUpdateManyWithoutCompanyNestedInput
+  accounting?: Prisma.AccountingEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  jobOpenings?: Prisma.JobOpeningUncheckedUpdateManyWithoutCompanyNestedInput
+  dictionaries?: Prisma.DictionaryUncheckedUpdateManyWithoutCompanyNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+  printerSettings?: Prisma.PrinterSettingsUncheckedUpdateOneWithoutCompanyNestedInput
+  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutCompanyNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
 
@@ -5229,6 +6520,10 @@ export type CompanyCountOutputType = {
   accounting: number
   jobOpenings: number
   dictionaries: number
+  auditLogs: number
+  webhooks: number
+  apiKeys: number
+  fileResources: number
 }
 
 export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5250,6 +6545,10 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   accounting?: boolean | CompanyCountOutputTypeCountAccountingArgs
   jobOpenings?: boolean | CompanyCountOutputTypeCountJobOpeningsArgs
   dictionaries?: boolean | CompanyCountOutputTypeCountDictionariesArgs
+  auditLogs?: boolean | CompanyCountOutputTypeCountAuditLogsArgs
+  webhooks?: boolean | CompanyCountOutputTypeCountWebhooksArgs
+  apiKeys?: boolean | CompanyCountOutputTypeCountApiKeysArgs
+  fileResources?: boolean | CompanyCountOutputTypeCountFileResourcesArgs
 }
 
 /**
@@ -5388,6 +6687,34 @@ export type CompanyCountOutputTypeCountDictionariesArgs<ExtArgs extends runtime.
   where?: Prisma.DictionaryWhereInput
 }
 
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountWebhooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WebhookWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountApiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApiKeyWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountFileResourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FileResourceWhereInput
+}
+
 
 export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5435,7 +6762,11 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   accounting?: boolean | Prisma.Company$accountingArgs<ExtArgs>
   jobOpenings?: boolean | Prisma.Company$jobOpeningsArgs<ExtArgs>
   dictionaries?: boolean | Prisma.Company$dictionariesArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Company$auditLogsArgs<ExtArgs>
   printerSettings?: boolean | Prisma.Company$printerSettingsArgs<ExtArgs>
+  webhooks?: boolean | Prisma.Company$webhooksArgs<ExtArgs>
+  apiKeys?: boolean | Prisma.Company$apiKeysArgs<ExtArgs>
+  fileResources?: boolean | Prisma.Company$fileResourcesArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
@@ -5549,7 +6880,11 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   accounting?: boolean | Prisma.Company$accountingArgs<ExtArgs>
   jobOpenings?: boolean | Prisma.Company$jobOpeningsArgs<ExtArgs>
   dictionaries?: boolean | Prisma.Company$dictionariesArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Company$auditLogsArgs<ExtArgs>
   printerSettings?: boolean | Prisma.Company$printerSettingsArgs<ExtArgs>
+  webhooks?: boolean | Prisma.Company$webhooksArgs<ExtArgs>
+  apiKeys?: boolean | Prisma.Company$apiKeysArgs<ExtArgs>
+  fileResources?: boolean | Prisma.Company$fileResourcesArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -5576,7 +6911,11 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     accounting: Prisma.$AccountingEntryPayload<ExtArgs>[]
     jobOpenings: Prisma.$JobOpeningPayload<ExtArgs>[]
     dictionaries: Prisma.$DictionaryPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     printerSettings: Prisma.$PrinterSettingsPayload<ExtArgs> | null
+    webhooks: Prisma.$WebhookPayload<ExtArgs>[]
+    apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
+    fileResources: Prisma.$FileResourcePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -6018,7 +7357,11 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   accounting<T extends Prisma.Company$accountingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$accountingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountingEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobOpenings<T extends Prisma.Company$jobOpeningsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$jobOpeningsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobOpeningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dictionaries<T extends Prisma.Company$dictionariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$dictionariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DictionaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.Company$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   printerSettings<T extends Prisma.Company$printerSettingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$printerSettingsArgs<ExtArgs>>): Prisma.Prisma__PrinterSettingsClient<runtime.Types.Result.GetResult<Prisma.$PrinterSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  webhooks<T extends Prisma.Company$webhooksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$webhooksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  apiKeys<T extends Prisma.Company$apiKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fileResources<T extends Prisma.Company$fileResourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$fileResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6895,6 +8238,30 @@ export type Company$dictionariesArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * Company.auditLogs
+ */
+export type Company$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
  * Company.printerSettings
  */
 export type Company$printerSettingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -6911,6 +8278,78 @@ export type Company$printerSettingsArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.PrinterSettingsInclude<ExtArgs> | null
   where?: Prisma.PrinterSettingsWhereInput
+}
+
+/**
+ * Company.webhooks
+ */
+export type Company$webhooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Webhook
+   */
+  select?: Prisma.WebhookSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Webhook
+   */
+  omit?: Prisma.WebhookOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookInclude<ExtArgs> | null
+  where?: Prisma.WebhookWhereInput
+  orderBy?: Prisma.WebhookOrderByWithRelationInput | Prisma.WebhookOrderByWithRelationInput[]
+  cursor?: Prisma.WebhookWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WebhookScalarFieldEnum | Prisma.WebhookScalarFieldEnum[]
+}
+
+/**
+ * Company.apiKeys
+ */
+export type Company$apiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApiKey
+   */
+  select?: Prisma.ApiKeySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApiKey
+   */
+  omit?: Prisma.ApiKeyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApiKeyInclude<ExtArgs> | null
+  where?: Prisma.ApiKeyWhereInput
+  orderBy?: Prisma.ApiKeyOrderByWithRelationInput | Prisma.ApiKeyOrderByWithRelationInput[]
+  cursor?: Prisma.ApiKeyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApiKeyScalarFieldEnum | Prisma.ApiKeyScalarFieldEnum[]
+}
+
+/**
+ * Company.fileResources
+ */
+export type Company$fileResourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FileResource
+   */
+  select?: Prisma.FileResourceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FileResource
+   */
+  omit?: Prisma.FileResourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileResourceInclude<ExtArgs> | null
+  where?: Prisma.FileResourceWhereInput
+  orderBy?: Prisma.FileResourceOrderByWithRelationInput | Prisma.FileResourceOrderByWithRelationInput[]
+  cursor?: Prisma.FileResourceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FileResourceScalarFieldEnum | Prisma.FileResourceScalarFieldEnum[]
 }
 
 /**

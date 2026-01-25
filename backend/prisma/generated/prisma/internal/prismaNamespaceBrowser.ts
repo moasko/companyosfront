@@ -90,7 +90,13 @@ export const ModelName = {
   LeaveRequest: 'LeaveRequest',
   Task: 'Task',
   Dictionary: 'Dictionary',
-  PrinterSettings: 'PrinterSettings'
+  PrinterSettings: 'PrinterSettings',
+  AuditLog: 'AuditLog',
+  Webhook: 'Webhook',
+  ApiKey: 'ApiKey',
+  FileResource: 'FileResource',
+  Currency: 'Currency',
+  ExchangeRate: 'ExchangeRate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -119,7 +125,9 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   lastLogin: 'lastLogin',
-  globalRole: 'globalRole'
+  globalRole: 'globalRole',
+  mfaEnabled: 'mfaEnabled',
+  mfaSecret: 'mfaSecret'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -603,6 +611,9 @@ export const InvoiceScalarFieldEnum = {
   companyId: 'companyId',
   quoteId: 'quoteId',
   contactCrmId: 'contactCrmId',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  approvalNote: 'approvalNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -648,6 +659,9 @@ export const PurchaseOrderScalarFieldEnum = {
   totalAmount: 'totalAmount',
   companyId: 'companyId',
   supplierId: 'supplierId',
+  approvedById: 'approvedById',
+  approvedAt: 'approvedAt',
+  approvalNote: 'approvalNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -756,12 +770,109 @@ export const PrinterSettingsScalarFieldEnum = {
 export type PrinterSettingsScalarFieldEnum = (typeof PrinterSettingsScalarFieldEnum)[keyof typeof PrinterSettingsScalarFieldEnum]
 
 
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  userId: 'userId',
+  companyId: 'companyId',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const WebhookScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  events: 'events',
+  isActive: 'isActive',
+  secret: 'secret',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WebhookScalarFieldEnum = (typeof WebhookScalarFieldEnum)[keyof typeof WebhookScalarFieldEnum]
+
+
+export const ApiKeyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  key: 'key',
+  isActive: 'isActive',
+  lastUsedAt: 'lastUsedAt',
+  expiresAt: 'expiresAt',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
+
+
+export const FileResourceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  path: 'path',
+  mimeType: 'mimeType',
+  size: 'size',
+  version: 'version',
+  tags: 'tags',
+  ocrContent: 'ocrContent',
+  parentId: 'parentId',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FileResourceScalarFieldEnum = (typeof FileResourceScalarFieldEnum)[keyof typeof FileResourceScalarFieldEnum]
+
+
+export const CurrencyScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  symbol: 'symbol',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CurrencyScalarFieldEnum = (typeof CurrencyScalarFieldEnum)[keyof typeof CurrencyScalarFieldEnum]
+
+
+export const ExchangeRateScalarFieldEnum = {
+  id: 'id',
+  fromCurrencyId: 'fromCurrencyId',
+  toCurrencyId: 'toCurrencyId',
+  rate: 'rate',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExchangeRateScalarFieldEnum = (typeof ExchangeRateScalarFieldEnum)[keyof typeof ExchangeRateScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -778,4 +889,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

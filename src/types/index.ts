@@ -1,4 +1,3 @@
-
 export interface ServiceItem {
   id: string;
   title: string;
@@ -118,6 +117,7 @@ export interface Employee {
   password?: string;
   joinDate: string;
   faceDescriptor?: string;
+  companyId?: string; // Company/Entity affectation
 }
 
 export interface Payslip {
@@ -141,6 +141,11 @@ export interface Payslip {
 
   // Net
   netSalary: number;
+
+  // Part Patronale (Portail Employeur / Partail Emplayer)
+  cnpsEmployer: number;
+  taxEmployer: number;
+  totalEmployer: number;
 
   status: 'Brouillon' | 'Validé' | 'Payé';
 }
@@ -197,6 +202,8 @@ export interface Transaction {
   label: string;
   category: string; // ex: 601 - Achats, 706 - Services
   amount: number;
+  currency?: string;
+  currencyRate?: number;
   type: 'Debit' | 'Credit';
   status: 'Validé' | 'Brouillon' | 'En attente';
 }
@@ -219,6 +226,8 @@ export interface Quote {
   validUntil: string;
   items: QuoteItem[];
   totalAmount: number;
+  currency?: string;
+  currencyRate?: number;
   status: 'Brouillon' | 'Envoyé' | 'Accepté' | 'Refusé' | 'Facturé';
   notes?: string;
 }
@@ -241,6 +250,8 @@ export interface Invoice {
   status: 'Draft' | 'Sent' | 'Paid' | 'Partially Paid' | 'Overdue' | 'Cancelled';
   totalAmount: number;
   paidAmount: number;
+  currency?: string;
+  currencyRate?: number;
   items: InvoiceItem[];
   quoteId?: string;
 }
@@ -303,6 +314,8 @@ export interface CRMDeal {
   stage: 'Nouveau' | 'Qualification' | 'Proposition' | 'Négociation' | 'Gagné' | 'Perdu';
   probability: number; // 0-100
   closingDate: string;
+  currency?: string;
+  currencyRate?: number;
 }
 
 export interface SiteContent {
@@ -391,4 +404,15 @@ export interface SiteContent {
   deals?: CRMDeal[]; // Note: Type mismatch might occur if backend returns Deal not CRMDeal
   accounting?: Transaction[];
   stockMovements?: StockMovement[];
+}
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'warning' | 'error' | 'success';
+  date: string;
+  read: boolean;
+  link?: string;
+  module?: 'stock' | 'crm' | 'finance' | 'hr' | 'system';
 }

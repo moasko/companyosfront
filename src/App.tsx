@@ -1,112 +1,129 @@
-
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { PublicSite } from './components/public/PublicSite';
 import { AdminDashboard } from './modules/admin/dashboard/Dashboard';
 import { LoginPage } from './modules/auth/LoginPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
-import { apiFetch } from './lib/api-client';
 import { SiteContent } from './types';
 import { CreateCompanyView } from './modules/admin/companies/CreateCompanyView';
 import { AttendanceKiosk } from './modules/kiosk/AttendanceKiosk';
+import { SupplierPortal } from './modules/admin/stock/components/SupplierPortal';
+import { EmployeePortal } from './modules/kiosk';
+import { useCompanies, useCompanyContent } from './hooks/useAppQueries';
 
 function AppContent() {
-  const { isAuthenticated, logout, user } = useAuth();
-  const [companies, setCompanies] = useState<any[]>([]);
-  const [activeCompanyId, setActiveCompanyId] = useState<string>('');
-  const [publicCompany, setPublicCompany] = useState<SiteContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [activeCompanyId, setActiveCompanyId] = useState<string>('');
 
-  const loadInitialData = async () => {
-    setIsLoading(true);
-    try {
-      if (isAuthenticated) {
-        const data = await apiFetch('/companies');
-        setCompanies(data);
-        if (data.length > 0) {
-          const firstId = data[0].id;
-          setActiveCompanyId(firstId);
-          const fullContent = await apiFetch(`/cms/${firstId}`);
-          setPublicCompany(fullContent);
+  // 1. Fetch Companies List
+  const {
+    data: companies = [],
+    isLoading: companiesLoading,
+    refetch: refetchCompanies,
+  } = useCompanies(isAuthenticated);
 
-          // Redirect to admin if we were on the onboarding page
-          if (window.location.pathname === '/onboarding') {
-            navigate('/admin');
-          }
-        } else {
-          // Redirect to onboarding if no companies
-          navigate('/onboarding');
+  // 2. Fetch Active Company Content
+  const { data: publicCompany, isLoading: contentLoading } = useCompanyContent(activeCompanyId);
+
+  // Effect 1: Tenant Detection & Selection
+  useEffect(() => {
+    if (companiesLoading) return;
+
+    const hostname = window.location.hostname;
+    const parts = hostname.split('.');
+    const potentialSlug = parts[0].toLowerCase();
+
+    if (companies.length > 0) {
+      // 1. Precise match via URL/Domain
+      const urlMatch = companies.find(
+        (c) =>
+          (c.slug && c.slug.toLowerCase() === potentialSlug) ||
+          (c.domain && c.domain.toLowerCase() === hostname.toLowerCase()),
+      );
+
+      if (urlMatch) {
+        if (activeCompanyId !== urlMatch.id) {
+          setActiveCompanyId(urlMatch.id);
         }
-      } else {
-        const publicList = await apiFetch('/companies/public');
-        if (publicList.length > 0) {
-          const firstId = publicList[0].id;
-          setActiveCompanyId(firstId);
-          const fullContent = await apiFetch(`/cms/${firstId}`);
-          setPublicCompany(fullContent);
+      } else if (!activeCompanyId) {
+        // 2. Default fallback if no match
+        setActiveCompanyId(companies[0].id);
+      }
+    }
+  }, [companies, companiesLoading, activeCompanyId]);
+
+  // Effect 2: Redirection Logic
+  useEffect(() => {
+    if (companiesLoading) return;
+
+    const path = window.location.pathname;
+
+    if (isAuthenticated) {
+      const hasCompanies = companies.length > 0;
+      const isEmployeeOnly =
+        user?.employeeProfiles?.length > 0 &&
+        (!user?.ownedCompanies || user.ownedCompanies.length === 0);
+
+      // Handle Admin coherence
+      if (path.startsWith('/admin')) {
+        if (isEmployeeOnly) {
+          navigate('/employee-portal', { replace: true });
+          return;
+        }
+        if (!hasCompanies) {
+          navigate('/onboarding', { replace: true });
+          return;
         }
       }
-    } catch (err) {
-      console.error("Failed to load companies", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    loadInitialData();
-  }, [isAuthenticated]);
+      // Handle Onboarding coherence
+      if (path === '/onboarding' && hasCompanies) {
+        navigate('/admin', { replace: true });
+        return;
+      }
+    }
+  }, [companies, isAuthenticated, user, companiesLoading, navigate]);
+
+  // Handlers
+  const handleSwitchCompany = (id: string) => {
+    setActiveCompanyId(id);
+  };
 
   const handleUpdate = (updatedContent: SiteContent) => {
-    setCompanies(prev => prev.map(c => c.id === updatedContent.id ? updatedContent : c));
+    // Optimistic / Manual Update
+    queryClient.setQueryData(['companies', isAuthenticated], (old: any[] | undefined) => {
+      if (!old) return [];
+      return old.map((c) => (c.id === updatedContent.id ? updatedContent : c));
+    });
+
     if (updatedContent.id === activeCompanyId) {
-      setPublicCompany(updatedContent);
+      queryClient.setQueryData(['companyContent', activeCompanyId], updatedContent);
     }
   };
 
-  const handleSwitchCompany = async (id: string) => {
-    setActiveCompanyId(id);
-    setIsLoading(true);
-    try {
-      const fullContent = await apiFetch(`/cms/${id}`);
-      setPublicCompany(fullContent);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const refreshDashboardData = async () => {
-    try {
-      if (isAuthenticated) {
-        const data = await apiFetch('/companies');
-        setCompanies(data);
-      }
-    } catch (err) {
-      console.error("Failed to refresh companies", err);
-    }
+  const refreshDashboardData = () => {
+    refetchCompanies();
   };
-
-  // isLoading is removed as per user request to avoid the loading screen
 
   return (
     <Routes>
       {/* Public Site */}
-      <Route path="/" element={
-        publicCompany ? (
-          <PublicSite
-            content={publicCompany}
-            onAdminClick={() => window.location.href = '/admin'}
-          />
-        ) : (
-          <div className="h-screen flex items-center justify-center bg-white text-slate-500">
-            Aucun contenu disponible.
-          </div>
-        )
-      } />
+      <Route
+        path="/"
+        element={
+          publicCompany ? (
+            <PublicSite content={publicCompany} onAdminClick={() => navigate('/admin')} />
+          ) : (
+            <div className="h-screen flex items-center justify-center bg-white text-slate-500">
+              {companiesLoading || contentLoading ? 'Chargement...' : 'Aucun contenu disponible.'}
+            </div>
+          )
+        }
+      />
 
       {/* Auth */}
       <Route path="/login" element={<LoginPage />} />
@@ -114,27 +131,41 @@ function AppContent() {
       {/* Kiosk */}
       <Route path="/kiosk/:companyId" element={<AttendanceKiosk />} />
 
+      {/* Supplier Portal */}
+      <Route path="/supplier-portal/:supplierId" element={<SupplierPortal />} />
+
+      {/* Employee Portal */}
+      <Route path="/employee-portal" element={<EmployeePortal />} />
+
       {/* Onboarding / Create Company */}
-      <Route path="/onboarding" element={
-        isAuthenticated ? (
-          <CreateCompanyView onSuccess={() => loadInitialData()} onLogout={logout} />
-        ) : <Navigate to="/login" />
-      } />
+      <Route
+        path="/onboarding"
+        element={
+          isAuthenticated ? (
+            <CreateCompanyView onSuccess={() => refetchCompanies()} onLogout={logout} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
 
       {/* Admin Dashboard */}
-      <Route path="/admin/*" element={
-        <ProtectedRoute>
-          <AdminDashboard
-            companies={companies}
-            activeCompanyId={activeCompanyId}
-            onSwitchCompany={handleSwitchCompany}
-            onUpdate={handleUpdate}
-            onLogout={logout}
-            onRefresh={refreshDashboardData}
-            onViewSite={() => window.location.href = '/'}
-          />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard
+              companies={companies}
+              activeCompanyId={activeCompanyId}
+              onSwitchCompany={handleSwitchCompany}
+              onUpdate={handleUpdate}
+              onLogout={logout}
+              onRefresh={refreshDashboardData}
+              onViewSite={() => navigate('/')}
+            />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
@@ -142,10 +173,17 @@ function AppContent() {
   );
 }
 
+import { ModalProvider } from './contexts/ModalContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+
 export default function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ModalProvider>
+        <NotificationProvider>
+          <AppContent />
+        </NotificationProvider>
+      </ModalProvider>
     </AuthProvider>
   );
 }

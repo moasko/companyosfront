@@ -1,410 +1,325 @@
 generator client {
-    provider = "prisma-client"
-    output   = "./generated/prisma"
+    provider = "prisma-client-js"
 }
 
 datasource db {
     provider = "postgresql"
 }
 
-// ================================
-// MODÈLES D'AUTHENTIFICATION
-// ================================
-
-// Utilisateur principal (propriétaire du compte)
 model User {
-    id           String     @id @default(cuid())
-    email        String     @unique
-    name         String?
-    passwordHash String
-    avatar       String?
-    isVerified   Boolean    @default(false)
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
-    lastLogin    DateTime?
-    globalRole   GlobalRole @default(USER)
-
-    // Propriétaire de ces entreprises
-    ownedCompanies CompanyOwner[]
-
-    // Peut aussi être employé dans d'autres entreprises
-    employeeProfiles Employee[]
-
-    // Sessions utilisateur
-    sessions Session[]
+    id                     String          @id @default(cuid())
+    email                  String          @unique
+    name                   String?
+    passwordHash           String
+    avatar                 String?
+    isVerified             Boolean         @default(false)
+    createdAt              DateTime        @default(now())
+    updatedAt              DateTime        @updatedAt
+    lastLogin              DateTime?
+    globalRole             GlobalRole      @default(USER)
+    mfaEnabled             Boolean         @default(false)
+    mfaSecret              String?
+    auditLogs              AuditLog[]
+    ownedCompanies         CompanyOwner[]
+    employeeProfiles       Employee[]
+    approvedInvoices       Invoice[]       @relation("InvoiceApprover")
+    approvedPurchaseOrders PurchaseOrder[] @relation("PurchaseOrderApprover")
+    sessions               Session[]
 }
 
-// Session utilisateur
 model Session {
     id        String   @id @default(cuid())
-    user      User     @relation(fields: [userId], references: [id])
     userId    String
     token     String   @unique
     ipAddress String?
     userAgent String?
     expiresAt DateTime
     createdAt DateTime @default(now())
+    user      User     @relation(fields: [userId], references: [id])
 
     @@index([userId])
 }
 
-// ================================
-// MODÈLES MULTI-TENANT
-// ================================
-
-// Relation propriétaire entreprise (pour les Users)
 model CompanyOwner {
-    id        String  @id @default(cuid())
-    user      User    @relation(fields: [userId], references: [id])
+    id        String      @id @default(cuid())
     userId    String
-    company   Company @relation(fields: [companyId], references: [id])
     companyId String
-
-    // Rôle du propriétaire dans cette entreprise
-    role     CompanyRole @default(OWNER)
-    isActive Boolean     @default(true)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    role      CompanyRole @default(OWNER)
+    isActive  Boolean     @default(true)
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+    company   Company     @relation(fields: [companyId], references: [id])
+    user      User        @relation(fields: [userId], references: [id])
 
     @@unique([userId, companyId])
 }
 
-// Entreprise (tenant)
 model Company {
-    id         String @id @default(cuid())
-    entityName String
-    country    String
-    currency   String
-    flag       String
-    slug       String @unique // Pour les URLs
-
-    // Informations de base
-    logo      String?
-    activity  String? // Activité Principale
-    sector    String? // Secteur d'activité
-    legalForm String? // Forme Juridique
-    capital   String? // Capital Social
-
-    // Fiscalité & Légal
-    ncc     String? // Numéro NCC
-    rccm    String? // Numéro RCCM
-    manager String? // Gérant / DG
-    tvaRate Float?  @default(18.0)
-
-    // Coordonnées
-    address String?
-    city    String?
-    bp      String? // Boîte Postale
-    phone   String?
-    email   String?
-
-    primaryColor   String?
-    secondaryColor String?
-    domain         String? @unique // Domaine personnalisé
-
-    // Statut de l'entreprise
+    id               String            @id @default(cuid())
+    entityName       String
+    country          String
+    currency         String
+    flag             String
+    slug             String            @unique
+    logo             String?
+    primaryColor     String?
+    secondaryColor   String?
+    domain           String?           @unique
     status           CompanyStatus     @default(ACTIVE)
     subscriptionPlan SubscriptionPlan? @default(FREE)
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+    activity         String?
+    address          String?
+    bp               String?
+    capital          String?
+    city             String?
+    email            String?
+    legalForm        String?
+    manager          String?
+    ncc              String?
+    phone            String?
+    rccm             String?
+    sector           String?
+    tvaRate          Float?            @default(18.0)
+    accounting       AccountingEntry[]
+    apiKeys          ApiKey[]
+    attendances      Attendance[]
+    auditLogs        AuditLog[]
+    owners           CompanyOwner[]
+    contacts         ContactCrm[]
+    currencies       Currency[]
+    deals            Deal[]
+    dictionaries     Dictionary[]
+    employees        Employee[]
+    fileResources    FileResource[]
+    invoices         Invoice[]
+    jobOpenings      JobOpening[]
+    leaveRequests    LeaveRequest[]
+    payslips         Payslip[]
+    printerSettings  PrinterSettings?
+    purchaseOrders   PurchaseOrder[]
+    quotes           Quote[]
+    stockCategories  StockCategory[]
+    stockItems       StockItem[]
+    stockMovements   StockMovement[]
+    suppliers        Supplier[]
+    supportTickets   SupportTicket[]
+    tasks            Task[]
+    geminiKey        String? // Clé API Google Gemini pour l'IA
+    webhooks         Webhook[]
 
-    // Propriétaires
-    owners CompanyOwner[]
-
-    // Employés
-    employees Employee[]
-
-    // Données métier
-    stockItems      StockItem[]
-    stockCategories StockCategory[]
-    suppliers       Supplier[]
-    stockMovements  StockMovement[]
-    contacts        ContactCrm[]
-    deals           Deal[]
-    quotes          Quote[]
-    invoices        Invoice[]
-    purchaseOrders  PurchaseOrder[]
-    tasks           Task[]
-    attendances     Attendance[]
-    leaveRequests   LeaveRequest[]
-    payslips        Payslip[]
-    accounting      AccountingEntry[]
-    jobOpenings     JobOpening[]
-    dictionaries    Dictionary[]
-    createdAt       DateTime          @default(now())
-    updatedAt       DateTime          @updatedAt
-    printerSettings PrinterSettings?
-
-    // Index pour la recherche
     @@index([entityName])
     @@index([country])
 }
 
-// Employé (peut être lié à un User ou non)
 model Employee {
-    id           String         @id @default(cuid())
-    matricule    String
-    fullName     String
-    position     String
-    department   String
-    email        String
-    phone        String
-    address      String
-    baseSalary   Float
-    status       EmployeeStatus @default(ACTIVE)
-    contractType ContractType
-
-    // Si l'employé a un compte utilisateur
-    user   User?   @relation(fields: [userId], references: [id])
-    userId String?
-
-    // Entreprise à laquelle il appartient
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String
-
-    // Rôle et permissions
-    role        EmployeeRole @default(EMPLOYEE)
-    permissions Permission[] // Permissions spécifiques
-    accessLevel AccessLevel  @default(BASIC)
-
-    // Informations de connexion (si pas de compte User)
+    id                         String          @id @default(cuid())
+    matricule                  String
+    fullName                   String
+    position                   String
+    department                 String
+    email                      String
+    phone                      String
+    address                    String
+    baseSalary                 Float
+    status                     EmployeeStatus  @default(ACTIVE)
+    contractType               ContractType
+    userId                     String?
+    companyId                  String
+    role                       EmployeeRole    @default(EMPLOYEE)
+    accessLevel                AccessLevel     @default(BASIC)
     temporaryPassword          String?
     temporaryPasswordExpiresAt DateTime?
     lastLogin                  DateTime?
+    joinDate                   DateTime
+    leaveDate                  DateTime?
+    createdAt                  DateTime        @default(now())
+    updatedAt                  DateTime        @updatedAt
+    roleId                     String?
+    faceDescriptor             String?
+    attendances                Attendance[]
+    company                    Company         @relation(fields: [companyId], references: [id])
+    customRole                 Role?           @relation(fields: [roleId], references: [id])
+    user                       User?           @relation(fields: [userId], references: [id])
+    leaveRequests              LeaveRequest[]
+    payslips                   Payslip[]
+    supportTickets             SupportTicket[]
+    assignedTasks              Task[]
+    permissions                Permission[]    @relation("EmployeeToPermission")
 
-    // Données RH
-    joinDate       DateTime
-    leaveDate      DateTime?
-    payslips       Payslip[]
-    attendances    Attendance[]
-    leaveRequests  LeaveRequest[]
-    assignedTasks  Task[]
-    faceDescriptor String? // Signature biométrique (JSON stringified array)
-
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    customRole Role?    @relation(fields: [roleId], references: [id])
-    roleId     String?
-
-    // Contraintes d'unicité
     @@unique([companyId, matricule])
     @@unique([companyId, email])
-    // Index pour la recherche
     @@index([companyId, status])
     @@index([companyId, department])
 }
 
-// ================================
-// MODÈLES DE PERMISSIONS
-// ================================
-
-// Modèle pour gérer les permissions spécifiques
 model Permission {
-    id          String @id @default(cuid())
-    code        String @unique // ex: "stock:read", "stock:write", "hr:read"
+    id          String           @id @default(cuid())
+    code        String           @unique
     name        String
     description String
-    category    String // "stock", "hr", "crm", "accounting"
-
-    employees Employee[]
-    roles     RolePermission[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    category    String
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    roles       RolePermission[]
+    employees   Employee[]       @relation("EmployeeToPermission")
 }
 
-// Rôles prédéfinis pour les employés
 model Role {
     id          String           @id @default(cuid())
-    name        String           @unique // "Admin", "Manager", "Viewer"
+    name        String           @unique
     description String
-    level       Int // 1 = bas, 10 = élevé
+    level       Int
     isDefault   Boolean          @default(false)
-    permissions RolePermission[]
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
     employees   Employee[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    permissions RolePermission[]
 }
 
-// Relation Role-Permission
 model RolePermission {
     id           String     @id @default(cuid())
-    role         Role       @relation(fields: [roleId], references: [id])
     roleId       String
-    permission   Permission @relation(fields: [permissionId], references: [id])
     permissionId String
-
-    createdAt DateTime @default(now())
+    createdAt    DateTime   @default(now())
+    permission   Permission @relation(fields: [permissionId], references: [id])
+    role         Role       @relation(fields: [roleId], references: [id])
 
     @@unique([roleId, permissionId])
 }
 
-// ================================
-// MODÈLES DE CONTENU (GLOBAUX)
-// ================================
-
-// SEO (Unique pour le site)
 model Seo {
-    id              String  @id @default(cuid())
+    id              String   @id @default(cuid())
     metaTitle       String
     metaDescription String
     metaKeywords    String
     ogImage         String?
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
 }
 
-// Hero
 model Hero {
-    id       String  @id @default(cuid())
-    title    String
-    subtitle String
-    tagline  String
-    imageUrl String?
-
+    id        String   @id @default(cuid())
+    title     String
+    subtitle  String
+    tagline   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    imageUrl  String?
 }
 
-// About
 model About {
-    id          String @id @default(cuid())
+    id          String   @id @default(cuid())
     title       String
     description String
     vision      String
     mission     String
     values      String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
-// Contact
 model Contact {
-    id      String @id @default(cuid())
-    email   String
-    phone   String
-    address String
-    hours   String
-
+    id        String   @id @default(cuid())
+    email     String
+    phone     String
+    address   String
+    hours     String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
-// Careers
 model Careers {
     id           String       @id @default(cuid())
     title        String
     subtitle     String
     description  String
     contactEmail String
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime     @updatedAt
     jobOpenings  JobOpening[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 }
 
-// Realizations
 model Realizations {
-    id      String        @id @default(cuid())
-    works   String[]
-    clients String[]
-    gallery GalleryItem[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id        String        @id @default(cuid())
+    works     String[]
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+    clients   String[]
+    gallery   GalleryItem[]
 }
 
-// Galerie
 model GalleryItem {
     id             String       @id @default(cuid())
     caption        String
     category       String
     imageUrl       String?
-    realizations   Realizations @relation(fields: [realizationsId], references: [id])
     realizationsId String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+    realizations   Realizations @relation(fields: [realizationsId], references: [id])
 }
 
-// Statistiques
 model Stat {
-    id    String @id @default(cuid())
-    value String
-    label String
-
+    id        String   @id @default(cuid())
+    value     String
+    label     String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
-// Lieux d'implantation
 model Location {
-    id      String @id @default(cuid())
-    country String
-    flag    String
-    year    String
-    status  String
-
+    id        String   @id @default(cuid())
+    country   String
+    flag      String
+    year      String
+    status    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
-// Services (partagés entre entreprises)
 model Service {
     id          String   @id @default(cuid())
     title       String
     description String
     iconName    String
     features    String[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
-// ================================
-// MODÈLES MÉTIER (inchangés mais avec companyId)
-// ================================
-
-// Stock
 model StockItem {
-    id          String  @id @default(cuid())
-    type        String
-    ref         String
-    barcode     String? // Nouveau: Code-barres
-    name        String
-    description String? // Nouveau: Description détaillée
-    brand       String? // Nouveau: Marque
-
-    // Catégorie
-    category    String? // Nom libre
-    categoryRel StockCategory? @relation(fields: [categoryId], references: [id])
-    categoryId  String?
-
-    // Fournisseur par défaut
-    supplier   Supplier? @relation(fields: [supplierId], references: [id])
-    supplierId String?
-
-    quantity          Int
-    unit              String
-    minThreshold      Int
-    location          String
-    value             Float
-    sellingPrice      Float
-    status            String
-    imageUrl          String? // Nouveau: Photo du produit
-    batchNumber       String? // Numéro de lot
-    expiryDate        DateTime? // Date d'expiration
-    manufacturingDate DateTime? // Date de fabrication
-    company           Company             @relation(fields: [companyId], references: [id])
-    companyId         String
-    movements         StockMovementItem[]
-    tasks             Task[]
-
+    id                 String              @id @default(cuid())
+    type               String
+    ref                String
+    name               String
+    category           String?
+    quantity           Int
+    unit               String
+    minThreshold       Int
+    location           String
+    value              Float
+    sellingPrice       Float
+    status             String
+    companyId          String
     createdAt          DateTime            @default(now())
     updatedAt          DateTime            @updatedAt
+    barcode            String?
+    brand              String?
+    description        String?
+    imageUrl           String?
+    categoryId         String?
+    supplierId         String?
+    batchNumber        String?
+    expiryDate         DateTime?
+    manufacturingDate  DateTime?
     purchaseOrderItems PurchaseOrderItem[]
+    categoryRel        StockCategory?      @relation(fields: [categoryId], references: [id])
+    company            Company             @relation(fields: [companyId], references: [id])
+    supplier           Supplier?           @relation(fields: [supplierId], references: [id])
+    movements          StockMovementItem[]
+    tasks              Task[]
 
     @@unique([companyId, ref])
     @@index([barcode])
@@ -413,17 +328,15 @@ model StockItem {
 model StockCategory {
     id        String      @id @default(cuid())
     name      String
-    company   Company     @relation(fields: [companyId], references: [id])
     companyId String
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+    company   Company     @relation(fields: [companyId], references: [id])
     items     StockItem[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
     @@unique([companyId, name])
 }
 
-// Fournisseurs
 model Supplier {
     id             String          @id @default(cuid())
     name           String
@@ -432,18 +345,16 @@ model Supplier {
     phone          String
     address        String
     category       String
-    company        Company         @relation(fields: [companyId], references: [id])
     companyId      String
-    stockMovements StockMovement[]
-
     createdAt      DateTime        @default(now())
     updatedAt      DateTime        @updatedAt
-    stockItems     StockItem[]
     purchaseOrders PurchaseOrder[]
+    stockItems     StockItem[]
+    stockMovements StockMovement[]
+    company        Company         @relation(fields: [companyId], references: [id])
     tasks          Task[]
 }
 
-// Mouvements de stock
 model StockMovement {
     id          String              @id @default(cuid())
     type        String
@@ -453,37 +364,32 @@ model StockMovement {
     partnerName String
     status      String
     totalValue  Float
-    company     Company             @relation(fields: [companyId], references: [id])
     companyId   String
-    supplier    Supplier?           @relation(fields: [supplierId], references: [id])
     supplierId  String?
+    createdAt   DateTime            @default(now())
+    updatedAt   DateTime            @updatedAt
+    company     Company             @relation(fields: [companyId], references: [id])
+    supplier    Supplier?           @relation(fields: [supplierId], references: [id])
     items       StockMovementItem[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
     @@unique([companyId, reference])
 }
 
-// Ligne de mouvement de stock
 model StockMovementItem {
     id              String        @id @default(cuid())
-    stockMovement   StockMovement @relation(fields: [stockMovementId], references: [id])
     stockMovementId String
-    stockItem       StockItem     @relation(fields: [stockItemId], references: [id])
     stockItemId     String
     description     String
     quantity        Int
     unitPrice       Float
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+    stockItem       StockItem     @relation(fields: [stockItemId], references: [id])
+    stockMovement   StockMovement @relation(fields: [stockMovementId], references: [id])
 }
 
-// Bulletins de paie
 model Payslip {
     id              String   @id @default(cuid())
-    employee        Employee @relation(fields: [employeeId], references: [id])
     employeeId      String
     employeeName    String
     period          String
@@ -498,344 +404,439 @@ model Payslip {
     otherDeductions Float
     netSalary       Float
     status          String
-    company         Company  @relation(fields: [companyId], references: [id])
     companyId       String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+    cnpsEmployer    Float    @default(0)
+    taxEmployer     Float    @default(0)
+    totalEmployer   Float    @default(0)
+    company         Company  @relation(fields: [companyId], references: [id])
+    employee        Employee @relation(fields: [employeeId], references: [id])
 }
 
-// Écritures comptables
 model AccountingEntry {
-    id        String   @id @default(cuid())
-    date      DateTime
-    ref       String
-    label     String
-    category  String
-    amount    Float
-    type      String
-    status    String
-    company   Company  @relation(fields: [companyId], references: [id])
-    companyId String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id           String   @id @default(cuid())
+    date         DateTime
+    ref          String
+    label        String
+    category     String
+    amount       Float
+    currency     String?
+    currencyRate Float?
+    type         String
+    status       String
+    companyId    String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    company      Company  @relation(fields: [companyId], references: [id])
 }
 
-// Devis
 model Quote {
-    id          String      @id @default(cuid())
-    reference   String
-    clientId    String
-    clientName  String
-    date        DateTime
-    validUntil  DateTime
-    status      String
-    totalAmount Float
-    company     Company     @relation(fields: [companyId], references: [id])
-    companyId   String
-    items       QuoteItem[]
-
+    id           String      @id @default(cuid())
+    reference    String
+    clientId     String
+    clientName   String
+    date         DateTime
+    validUntil   DateTime
+    totalAmount  Float
+    currency     String?
+    currencyRate Float?
+    status       String
+    companyId    String
     createdAt    DateTime    @default(now())
     updatedAt    DateTime    @updatedAt
-    contactCrm   ContactCrm? @relation(fields: [contactCrmId], references: [id])
     contactCrmId String?
     invoices     Invoice[]
+    company      Company     @relation(fields: [companyId], references: [id])
+    contactCrm   ContactCrm? @relation(fields: [contactCrmId], references: [id])
+    items        QuoteItem[]
 
     @@unique([companyId, reference])
 }
 
-// Ligne de devis
 model QuoteItem {
-    id          String @id @default(cuid())
-    quote       Quote  @relation(fields: [quoteId], references: [id])
+    id          String   @id @default(cuid())
     quoteId     String
     description String
     quantity    Int
     unitPrice   Float
     total       Float
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    quote       Quote    @relation(fields: [quoteId], references: [id])
 }
 
-// CRM - Contacts
 model ContactCrm {
-    id          String    @id @default(cuid())
-    companyName String
-    contactName String
-    email       String
-    phone       String
-    address     String
-    type        String
-    status      String
-    lastContact DateTime
-    industry    String
-    deals       Deal[]
-    quotes      Quote[]
-    invoices    Invoice[]
-    tasks       Task[]
-    company     Company   @relation(fields: [companyId], references: [id])
-    companyId   String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id             String          @id @default(cuid())
+    companyName    String
+    contactName    String
+    email          String
+    phone          String
+    address        String
+    type           String
+    status         String
+    lastContact    DateTime
+    industry       String
+    companyId      String
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
+    company        Company         @relation(fields: [companyId], references: [id])
+    deals          Deal[]
+    invoices       Invoice[]
+    quotes         Quote[]
+    supportTickets SupportTicket[]
+    tasks          Task[]
 }
 
-// CRM - Opportunités
 model Deal {
-    id          String     @id @default(cuid())
-    title       String
-    contact     ContactCrm @relation(fields: [contactId], references: [id])
-    contactId   String
-    amount      Float
-    stage       String
-    probability Int
-    closingDate DateTime
-    company     Company    @relation(fields: [companyId], references: [id])
-    companyId   String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id           String     @id @default(cuid())
+    title        String
+    contactId    String
+    amount       Float
+    currency     String?
+    currencyRate Float?
+    stage        String
+    probability  Int
+    closingDate  DateTime
+    companyId    String
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    company      Company    @relation(fields: [companyId], references: [id])
+    contact      ContactCrm @relation(fields: [contactId], references: [id])
 }
 
-// Offres d'emploi
 model JobOpening {
-    id          String  @id @default(cuid())
+    id          String   @id @default(cuid())
     title       String
     location    String
     type        String
     description String
     status      String
-    careers     Careers @relation(fields: [careersId], references: [id])
     careersId   String
-    company     Company @relation(fields: [companyId], references: [id])
     companyId   String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    careers     Careers  @relation(fields: [careersId], references: [id])
+    company     Company  @relation(fields: [companyId], references: [id])
 }
 
-// ================================
-// NOUVEAUX MODÈLES (Step 424)
-// ================================
-
-// Factures
 model Invoice {
-    id          String   @id @default(cuid())
-    reference   String
-    clientId    String?
-    clientName  String
-    date        DateTime
-    dueDate     DateTime
-    status      String // 'Draft', 'Sent', 'Paid', 'Partially Paid', 'Overdue', 'Cancelled'
-    totalAmount Float
-    paidAmount  Float    @default(0)
-
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String
-
-    // Source (Optionnel)
-    quote   Quote?  @relation(fields: [quoteId], references: [id])
-    quoteId String?
-
-    items    InvoiceItem[]
-    payments Payment[]
-
-    contactCrm   ContactCrm? @relation(fields: [contactCrmId], references: [id])
+    id           String        @id @default(cuid())
+    reference    String
+    clientId     String?
+    clientName   String
+    date         DateTime
+    dueDate      DateTime
+    status       String
+    totalAmount  Float
+    paidAmount   Float         @default(0)
+    currency     String?
+    currencyRate Float?
+    companyId    String
+    quoteId      String?
     contactCrmId String?
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    approvalNote String?
+    approvedAt   DateTime?
+    approvedById String?
+    approvedBy   User?         @relation("InvoiceApprover", fields: [approvedById], references: [id])
+    company      Company       @relation(fields: [companyId], references: [id])
+    contactCrm   ContactCrm?   @relation(fields: [contactCrmId], references: [id])
+    quote        Quote?        @relation(fields: [quoteId], references: [id])
+    items        InvoiceItem[]
+    payments     Payment[]
 
     @@unique([companyId, reference])
 }
 
 model InvoiceItem {
-    id          String  @id @default(cuid())
-    invoice     Invoice @relation(fields: [invoiceId], references: [id])
+    id          String   @id @default(cuid())
     invoiceId   String
     description String
     quantity    Int
     unitPrice   Float
     total       Float
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    invoice     Invoice  @relation(fields: [invoiceId], references: [id])
 }
 
-// Paiements
 model Payment {
     id        String   @id @default(cuid())
     reference String?
     amount    Float
     date      DateTime
-    method    String // 'Cash', 'Check', 'Transfer', 'MobileMoney'
+    method    String
     notes     String?
-
-    invoice   Invoice @relation(fields: [invoiceId], references: [id])
     invoiceId String
-
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    invoice   Invoice  @relation(fields: [invoiceId], references: [id])
 }
 
-// Commandes Fournisseurs
 model PurchaseOrder {
-    id           String    @id @default(cuid())
+    id           String              @id @default(cuid())
     reference    String
     date         DateTime
     expectedDate DateTime?
-    status       String // 'Draft', 'Ordered', 'Received', 'Cancelled'
+    status       String
     totalAmount  Float
-
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String
-
-    supplier   Supplier @relation(fields: [supplierId], references: [id])
-    supplierId String
-
-    items PurchaseOrderItem[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    companyId    String
+    supplierId   String
+    createdAt    DateTime            @default(now())
+    updatedAt    DateTime            @updatedAt
+    approvalNote String?
+    approvedAt   DateTime?
+    approvedById String?
+    approvedBy   User?               @relation("PurchaseOrderApprover", fields: [approvedById], references: [id])
+    company      Company             @relation(fields: [companyId], references: [id])
+    supplier     Supplier            @relation(fields: [supplierId], references: [id])
+    items        PurchaseOrderItem[]
 
     @@unique([companyId, reference])
 }
 
 model PurchaseOrderItem {
     id              String        @id @default(cuid())
-    purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
     purchaseOrderId String
-
-    stockItem   StockItem? @relation(fields: [stockItemId], references: [id])
-    stockItemId String?
-
-    description String // Nom du produit ou service
-    quantity    Int
-    unitPrice   Float
-    total       Float
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    stockItemId     String?
+    description     String
+    quantity        Int
+    unitPrice       Float
+    total           Float
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+    purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+    stockItem       StockItem?    @relation(fields: [stockItemId], references: [id])
 }
 
-// RH - Pointage
 model Attendance {
-    id       String    @id @default(cuid())
-    date     DateTime
-    checkIn  DateTime?
-    checkOut DateTime?
-    status   String // 'Present', 'Absent', 'Late', 'Excused'
-    notes    String?
-
-    employee   Employee @relation(fields: [employeeId], references: [id])
+    id         String    @id @default(cuid())
+    date       DateTime
+    checkIn    DateTime?
+    checkOut   DateTime?
+    status     String
+    notes      String?
     employeeId String
-
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    companyId  String
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    company    Company   @relation(fields: [companyId], references: [id])
+    employee   Employee  @relation(fields: [employeeId], references: [id])
 
     @@unique([employeeId, date])
 }
 
-// RH - Demandes de Congés
 model LeaveRequest {
     id         String    @id @default(cuid())
-    type       String // 'Paid', 'Sick', 'Unpaid', 'Maternity', 'Other'
+    type       String
     startDate  DateTime
     endDate    DateTime
     reason     String?
-    status     String // 'Pending', 'Approved', 'Rejected'
+    status     String
     approvedAt DateTime?
-
-    employee   Employee @relation(fields: [employeeId], references: [id])
     employeeId String
-
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    companyId  String
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    company    Company   @relation(fields: [companyId], references: [id])
+    employee   Employee  @relation(fields: [employeeId], references: [id])
 }
 
-// Tâches & Projets
 model Task {
-    id          String    @id @default(cuid())
-    title       String
-    description String?
-    priority    String // 'Low', 'Medium', 'High', 'Urgent'
-    status      String // 'Todo', 'In Progress', 'Done', 'Archived'
-    dueDate     DateTime?
-
-    assignedTo   Employee? @relation(fields: [assignedToId], references: [id])
-    assignedToId String?
-
-    // Relations optionnelles (Tagging)
-    client     ContactCrm? @relation(fields: [clientId], references: [id])
-    clientId   String?
-    supplier   Supplier?   @relation(fields: [supplierId], references: [id])
-    supplierId String?
-    product    StockItem?  @relation(fields: [productId], references: [id])
-    productId  String?
-
-    // Nouveaux champs
+    id             String      @id @default(cuid())
+    title          String
+    description    String?
+    priority       String
+    status         String
+    dueDate        DateTime?
+    assignedToId   String?
+    companyId      String
+    createdAt      DateTime    @default(now())
+    updatedAt      DateTime    @updatedAt
+    actualHours    Float?
     category       String?
-    tags           String[]
-    startDate      DateTime?
+    clientId       String?
     completedAt    DateTime?
     estimatedHours Float?
-    actualHours    Float?
-
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    productId      String?
+    startDate      DateTime?
+    supplierId     String?
+    tags           String[]
+    assignedTo     Employee?   @relation(fields: [assignedToId], references: [id])
+    client         ContactCrm? @relation(fields: [clientId], references: [id])
+    company        Company     @relation(fields: [companyId], references: [id])
+    product        StockItem?  @relation(fields: [productId], references: [id])
+    supplier       Supplier?   @relation(fields: [supplierId], references: [id])
 }
 
-// Dictionnaire de données (Listes déroulantes paramétrables)
 model Dictionary {
-    id        String  @id @default(cuid())
-    type      String // ex: 'BRAND', 'UNIT', 'DEPARTMENT', 'EXPENSE_CATEGORY'
-    value     String // ex: 'Samsung', 'Kg', 'Marketing'
-    code      String? // Code optionnel
-    color     String? // Couleur d'affichage optionnelle
-    company   Company @relation(fields: [companyId], references: [id])
+    id        String   @id @default(cuid())
+    type      String
+    value     String
+    code      String?
+    color     String?
     companyId String
-
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    company   Company  @relation(fields: [companyId], references: [id])
 
     @@unique([companyId, type, value])
     @@index([companyId, type])
 }
 
-// Configuration des imprimantes (par entreprise)
 model PrinterSettings {
-    id              String  @id @default(cuid())
-    documentPrinter String? // Nom de l'imprimante A4 par défaut
-    barcodePrinter  String? // Nom de l'imprimante thermique
-    labelWidth      Int     @default(50) // Largeur étiquette (mm)
-    labelHeight     Int     @default(30) // Hauteur étiquette (mm)
+    id              String   @id @default(cuid())
+    documentPrinter String?
+    barcodePrinter  String?
+    labelWidth      Int      @default(50)
+    labelHeight     Int      @default(30)
+    companyId       String   @unique
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+    company         Company  @relation(fields: [companyId], references: [id])
+}
 
-    company   Company @relation(fields: [companyId], references: [id])
-    companyId String  @unique
+model AuditLog {
+    id        String   @id @default(cuid())
+    action    String
+    entity    String
+    entityId  String?
+    oldValue  Json?
+    newValue  Json?
+    ipAddress String?
+    userAgent String?
+    userId    String?
+    companyId String?
+    createdAt DateTime @default(now())
+    company   Company? @relation(fields: [companyId], references: [id])
+    user      User?    @relation(fields: [userId], references: [id])
 
+    @@index([companyId, entity])
+    @@index([userId])
+    @@index([createdAt])
+}
+
+model Webhook {
+    id        String   @id @default(cuid())
+    url       String
+    events    String[]
+    isActive  Boolean  @default(true)
+    secret    String?
+    companyId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    company   Company  @relation(fields: [companyId], references: [id])
+
+    @@index([companyId])
+}
+
+model ApiKey {
+    id         String    @id @default(cuid())
+    name       String
+    key        String    @unique
+    isActive   Boolean   @default(true)
+    lastUsedAt DateTime?
+    expiresAt  DateTime?
+    companyId  String
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    company    Company   @relation(fields: [companyId], references: [id])
+
+    @@index([companyId])
+}
+
+model FileResource {
+    id         String         @id @default(cuid())
+    name       String
+    path       String
+    mimeType   String
+    size       Int
+    version    Int            @default(1)
+    tags       String[]
+    ocrContent String?
+    parentId   String?
+    companyId  String
+    createdAt  DateTime       @default(now())
+    updatedAt  DateTime       @updatedAt
+    company    Company        @relation(fields: [companyId], references: [id])
+    parent     FileResource?  @relation("FileVersions", fields: [parentId], references: [id])
+    versions   FileResource[] @relation("FileVersions")
+
+    @@index([companyId])
+}
+
+model Currency {
+    id        String         @id @default(cuid())
+    code      String
+    symbol    String
+    name      String
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    companyId String
+    isActive  Boolean        @default(true)
+    isBase    Boolean        @default(false)
+    rate      Float          @default(1.0)
+    company   Company        @relation(fields: [companyId], references: [id])
+    ratesFrom ExchangeRate[] @relation("FromCurrency")
+    ratesTo   ExchangeRate[] @relation("ToCurrency")
+
+    @@unique([companyId, code])
+}
+
+model ExchangeRate {
+    id             String   @id @default(cuid())
+    fromCurrencyId String
+    toCurrencyId   String
+    rate           Float
+    date           DateTime @default(now())
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+    fromCurrency   Currency @relation("FromCurrency", fields: [fromCurrencyId], references: [id])
+    toCurrency     Currency @relation("ToCurrency", fields: [toCurrencyId], references: [id])
+
+    @@unique([fromCurrencyId, toCurrencyId, date])
+}
+
+model SupportTicket {
+    id            String          @id @default(cuid())
+    reference     String
+    subject       String
+    category      String
+    priority      String
+    status        String
+    contactId     String?
+    assignedToId  String?
+    customerName  String?
+    customerEmail String?
+    companyId     String
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+    assignedTo    Employee?       @relation(fields: [assignedToId], references: [id])
+    company       Company         @relation(fields: [companyId], references: [id])
+    contact       ContactCrm?     @relation(fields: [contactId], references: [id])
+    messages      TicketMessage[]
+
+    @@unique([companyId, reference])
+    @@index([companyId, status])
+}
+
+model TicketMessage {
+    id         String        @id @default(cuid())
+    content    String
+    senderId   String?
+    isSystem   Boolean       @default(false)
+    senderName String?
+    ticketId   String
+    createdAt  DateTime      @default(now())
+    ticket     SupportTicket @relation(fields: [ticketId], references: [id])
 }
 
 enum GlobalRole {
     SUPER_ADMIN
     USER
 }
-
-// ================================
-// ENUMS
-// ================================
 
 enum CompanyStatus {
     ACTIVE
@@ -863,12 +864,12 @@ enum ContractType {
 }
 
 enum EmployeeRole {
-    SUPER_ADMIN // Accès à tout (User propriétaire)
-    ADMIN // Admin de l'entreprise
-    MANAGER // Gestionnaire département
-    EMPLOYEE // Employé standard
-    VIEWER // Lecture seule
-    GUEST // Accès limité
+    SUPER_ADMIN
+    ADMIN
+    MANAGER
+    EMPLOYEE
+    VIEWER
+    GUEST
 }
 
 enum AccessLevel {

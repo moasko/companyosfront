@@ -35,6 +35,8 @@ export type UserMinAggregateOutputType = {
   updatedAt: Date | null
   lastLogin: Date | null
   globalRole: $Enums.GlobalRole | null
+  mfaEnabled: boolean | null
+  mfaSecret: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -48,6 +50,8 @@ export type UserMaxAggregateOutputType = {
   updatedAt: Date | null
   lastLogin: Date | null
   globalRole: $Enums.GlobalRole | null
+  mfaEnabled: boolean | null
+  mfaSecret: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -61,6 +65,8 @@ export type UserCountAggregateOutputType = {
   updatedAt: number
   lastLogin: number
   globalRole: number
+  mfaEnabled: number
+  mfaSecret: number
   _all: number
 }
 
@@ -76,6 +82,8 @@ export type UserMinAggregateInputType = {
   updatedAt?: true
   lastLogin?: true
   globalRole?: true
+  mfaEnabled?: true
+  mfaSecret?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -89,6 +97,8 @@ export type UserMaxAggregateInputType = {
   updatedAt?: true
   lastLogin?: true
   globalRole?: true
+  mfaEnabled?: true
+  mfaSecret?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -102,6 +112,8 @@ export type UserCountAggregateInputType = {
   updatedAt?: true
   lastLogin?: true
   globalRole?: true
+  mfaEnabled?: true
+  mfaSecret?: true
   _all?: true
 }
 
@@ -188,6 +200,8 @@ export type UserGroupByOutputType = {
   updatedAt: Date
   lastLogin: Date | null
   globalRole: $Enums.GlobalRole
+  mfaEnabled: boolean
+  mfaSecret: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -222,9 +236,14 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFilter<"User"> | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
+  mfaSecret?: Prisma.StringNullableFilter<"User"> | string | null
   ownedCompanies?: Prisma.CompanyOwnerListRelationFilter
   employeeProfiles?: Prisma.EmployeeListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
+  approvedInvoices?: Prisma.InvoiceListRelationFilter
+  approvedPurchaseOrders?: Prisma.PurchaseOrderListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -238,9 +257,14 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
   globalRole?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
+  mfaSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   ownedCompanies?: Prisma.CompanyOwnerOrderByRelationAggregateInput
   employeeProfiles?: Prisma.EmployeeOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
+  approvedInvoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -257,9 +281,14 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFilter<"User"> | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFilter<"User"> | boolean
+  mfaSecret?: Prisma.StringNullableFilter<"User"> | string | null
   ownedCompanies?: Prisma.CompanyOwnerListRelationFilter
   employeeProfiles?: Prisma.EmployeeListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
+  approvedInvoices?: Prisma.InvoiceListRelationFilter
+  approvedPurchaseOrders?: Prisma.PurchaseOrderListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -273,6 +302,8 @@ export type UserOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
   globalRole?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
+  mfaSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -292,6 +323,8 @@ export type UserScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   lastLogin?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleWithAggregatesFilter<"User"> | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  mfaSecret?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -305,9 +338,14 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   ownedCompanies?: Prisma.CompanyOwnerCreateNestedManyWithoutUserInput
   employeeProfiles?: Prisma.EmployeeCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -321,9 +359,14 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   ownedCompanies?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutUserInput
   employeeProfiles?: Prisma.EmployeeUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -337,9 +380,14 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownedCompanies?: Prisma.CompanyOwnerUpdateManyWithoutUserNestedInput
   employeeProfiles?: Prisma.EmployeeUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -353,9 +401,14 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownedCompanies?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutUserNestedInput
   employeeProfiles?: Prisma.EmployeeUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -369,6 +422,8 @@ export type UserCreateManyInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -382,6 +437,8 @@ export type UserUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -395,6 +452,8 @@ export type UserUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -408,6 +467,8 @@ export type UserCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
   globalRole?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
+  mfaSecret?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -421,6 +482,8 @@ export type UserMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
   globalRole?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
+  mfaSecret?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -434,6 +497,8 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
   globalRole?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
+  mfaSecret?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -514,6 +579,54 @@ export type UserUpdateOneWithoutEmployeeProfilesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployeeProfilesInput, Prisma.UserUpdateWithoutEmployeeProfilesInput>, Prisma.UserUncheckedUpdateWithoutEmployeeProfilesInput>
 }
 
+export type UserCreateNestedOneWithoutApprovedInvoicesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedInvoicesInput, Prisma.UserUncheckedCreateWithoutApprovedInvoicesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedInvoicesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutApprovedInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedInvoicesInput, Prisma.UserUncheckedCreateWithoutApprovedInvoicesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedInvoicesInput
+  upsert?: Prisma.UserUpsertWithoutApprovedInvoicesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedInvoicesInput, Prisma.UserUpdateWithoutApprovedInvoicesInput>, Prisma.UserUncheckedUpdateWithoutApprovedInvoicesInput>
+}
+
+export type UserCreateNestedOneWithoutApprovedPurchaseOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedPurchaseOrdersInput, Prisma.UserUncheckedCreateWithoutApprovedPurchaseOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedPurchaseOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutApprovedPurchaseOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedPurchaseOrdersInput, Prisma.UserUncheckedCreateWithoutApprovedPurchaseOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedPurchaseOrdersInput
+  upsert?: Prisma.UserUpsertWithoutApprovedPurchaseOrdersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedPurchaseOrdersInput, Prisma.UserUpdateWithoutApprovedPurchaseOrdersInput>, Prisma.UserUncheckedUpdateWithoutApprovedPurchaseOrdersInput>
+}
+
+export type UserCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutAuditLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   email: string
@@ -525,8 +638,13 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   ownedCompanies?: Prisma.CompanyOwnerCreateNestedManyWithoutUserInput
   employeeProfiles?: Prisma.EmployeeCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -540,8 +658,13 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   ownedCompanies?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutUserInput
   employeeProfiles?: Prisma.EmployeeUncheckedCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -571,8 +694,13 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownedCompanies?: Prisma.CompanyOwnerUpdateManyWithoutUserNestedInput
   employeeProfiles?: Prisma.EmployeeUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -586,8 +714,13 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownedCompanies?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutUserNestedInput
   employeeProfiles?: Prisma.EmployeeUncheckedUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOwnedCompaniesInput = {
@@ -601,8 +734,13 @@ export type UserCreateWithoutOwnedCompaniesInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   employeeProfiles?: Prisma.EmployeeCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOwnedCompaniesInput = {
@@ -616,8 +754,13 @@ export type UserUncheckedCreateWithoutOwnedCompaniesInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   employeeProfiles?: Prisma.EmployeeUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOwnedCompaniesInput = {
@@ -647,8 +790,13 @@ export type UserUpdateWithoutOwnedCompaniesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeProfiles?: Prisma.EmployeeUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedCompaniesInput = {
@@ -662,8 +810,13 @@ export type UserUncheckedUpdateWithoutOwnedCompaniesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   employeeProfiles?: Prisma.EmployeeUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEmployeeProfilesInput = {
@@ -677,8 +830,13 @@ export type UserCreateWithoutEmployeeProfilesInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   ownedCompanies?: Prisma.CompanyOwnerCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -692,8 +850,13 @@ export type UserUncheckedCreateWithoutEmployeeProfilesInput = {
   updatedAt?: Date | string
   lastLogin?: Date | string | null
   globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
   ownedCompanies?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -723,8 +886,13 @@ export type UserUpdateWithoutEmployeeProfilesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownedCompanies?: Prisma.CompanyOwnerUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -738,8 +906,301 @@ export type UserUncheckedUpdateWithoutEmployeeProfilesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownedCompanies?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutApprovedInvoicesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash: string
+  avatar?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
+  ownedCompanies?: Prisma.CompanyOwnerCreateNestedManyWithoutUserInput
+  employeeProfiles?: Prisma.EmployeeCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovedInvoicesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash: string
+  avatar?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
+  ownedCompanies?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutUserInput
+  employeeProfiles?: Prisma.EmployeeUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovedInvoicesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedInvoicesInput, Prisma.UserUncheckedCreateWithoutApprovedInvoicesInput>
+}
+
+export type UserUpsertWithoutApprovedInvoicesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedInvoicesInput, Prisma.UserUncheckedUpdateWithoutApprovedInvoicesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedInvoicesInput, Prisma.UserUncheckedCreateWithoutApprovedInvoicesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedInvoicesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedInvoicesInput, Prisma.UserUncheckedUpdateWithoutApprovedInvoicesInput>
+}
+
+export type UserUpdateWithoutApprovedInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownedCompanies?: Prisma.CompanyOwnerUpdateManyWithoutUserNestedInput
+  employeeProfiles?: Prisma.EmployeeUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownedCompanies?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutUserNestedInput
+  employeeProfiles?: Prisma.EmployeeUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutApprovedPurchaseOrdersInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash: string
+  avatar?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
+  ownedCompanies?: Prisma.CompanyOwnerCreateNestedManyWithoutUserInput
+  employeeProfiles?: Prisma.EmployeeCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovedPurchaseOrdersInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash: string
+  avatar?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
+  ownedCompanies?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutUserInput
+  employeeProfiles?: Prisma.EmployeeUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutApprovedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovedPurchaseOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedPurchaseOrdersInput, Prisma.UserUncheckedCreateWithoutApprovedPurchaseOrdersInput>
+}
+
+export type UserUpsertWithoutApprovedPurchaseOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedPurchaseOrdersInput, Prisma.UserUncheckedUpdateWithoutApprovedPurchaseOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedPurchaseOrdersInput, Prisma.UserUncheckedCreateWithoutApprovedPurchaseOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedPurchaseOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedPurchaseOrdersInput, Prisma.UserUncheckedUpdateWithoutApprovedPurchaseOrdersInput>
+}
+
+export type UserUpdateWithoutApprovedPurchaseOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownedCompanies?: Prisma.CompanyOwnerUpdateManyWithoutUserNestedInput
+  employeeProfiles?: Prisma.EmployeeUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedPurchaseOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownedCompanies?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutUserNestedInput
+  employeeProfiles?: Prisma.EmployeeUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutApprovedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAuditLogsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash: string
+  avatar?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
+  ownedCompanies?: Prisma.CompanyOwnerCreateNestedManyWithoutUserInput
+  employeeProfiles?: Prisma.EmployeeCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  passwordHash: string
+  avatar?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  globalRole?: $Enums.GlobalRole
+  mfaEnabled?: boolean
+  mfaSecret?: string | null
+  ownedCompanies?: Prisma.CompanyOwnerUncheckedCreateNestedManyWithoutUserInput
+  employeeProfiles?: Prisma.EmployeeUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  approvedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type UserUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type UserUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownedCompanies?: Prisma.CompanyOwnerUpdateManyWithoutUserNestedInput
+  employeeProfiles?: Prisma.EmployeeUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  globalRole?: Prisma.EnumGlobalRoleFieldUpdateOperationsInput | $Enums.GlobalRole
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownedCompanies?: Prisma.CompanyOwnerUncheckedUpdateManyWithoutUserNestedInput
+  employeeProfiles?: Prisma.EmployeeUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  approvedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedPurchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 
@@ -751,12 +1212,18 @@ export type UserCountOutputType = {
   ownedCompanies: number
   employeeProfiles: number
   sessions: number
+  approvedInvoices: number
+  approvedPurchaseOrders: number
+  auditLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ownedCompanies?: boolean | UserCountOutputTypeCountOwnedCompaniesArgs
   employeeProfiles?: boolean | UserCountOutputTypeCountEmployeeProfilesArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  approvedInvoices?: boolean | UserCountOutputTypeCountApprovedInvoicesArgs
+  approvedPurchaseOrders?: boolean | UserCountOutputTypeCountApprovedPurchaseOrdersArgs
+  auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
 }
 
 /**
@@ -790,6 +1257,27 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.SessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedPurchaseOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PurchaseOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -802,9 +1290,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   lastLogin?: boolean
   globalRole?: boolean
+  mfaEnabled?: boolean
+  mfaSecret?: boolean
   ownedCompanies?: boolean | Prisma.User$ownedCompaniesArgs<ExtArgs>
   employeeProfiles?: boolean | Prisma.User$employeeProfilesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  approvedInvoices?: boolean | Prisma.User$approvedInvoicesArgs<ExtArgs>
+  approvedPurchaseOrders?: boolean | Prisma.User$approvedPurchaseOrdersArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -819,6 +1312,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   lastLogin?: boolean
   globalRole?: boolean
+  mfaEnabled?: boolean
+  mfaSecret?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -832,6 +1327,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   lastLogin?: boolean
   globalRole?: boolean
+  mfaEnabled?: boolean
+  mfaSecret?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -845,13 +1342,18 @@ export type UserSelectScalar = {
   updatedAt?: boolean
   lastLogin?: boolean
   globalRole?: boolean
+  mfaEnabled?: boolean
+  mfaSecret?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "passwordHash" | "avatar" | "isVerified" | "createdAt" | "updatedAt" | "lastLogin" | "globalRole", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "passwordHash" | "avatar" | "isVerified" | "createdAt" | "updatedAt" | "lastLogin" | "globalRole" | "mfaEnabled" | "mfaSecret", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ownedCompanies?: boolean | Prisma.User$ownedCompaniesArgs<ExtArgs>
   employeeProfiles?: boolean | Prisma.User$employeeProfilesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  approvedInvoices?: boolean | Prisma.User$approvedInvoicesArgs<ExtArgs>
+  approvedPurchaseOrders?: boolean | Prisma.User$approvedPurchaseOrdersArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -863,6 +1365,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     ownedCompanies: Prisma.$CompanyOwnerPayload<ExtArgs>[]
     employeeProfiles: Prisma.$EmployeePayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
+    approvedInvoices: Prisma.$InvoicePayload<ExtArgs>[]
+    approvedPurchaseOrders: Prisma.$PurchaseOrderPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -875,6 +1380,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     updatedAt: Date
     lastLogin: Date | null
     globalRole: $Enums.GlobalRole
+    mfaEnabled: boolean
+    mfaSecret: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1272,6 +1779,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   ownedCompanies<T extends Prisma.User$ownedCompaniesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employeeProfiles<T extends Prisma.User$employeeProfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employeeProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedInvoices<T extends Prisma.User$approvedInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedPurchaseOrders<T extends Prisma.User$approvedPurchaseOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedPurchaseOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1311,6 +1821,8 @@ export interface UserFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLogin: Prisma.FieldRef<"User", 'DateTime'>
   readonly globalRole: Prisma.FieldRef<"User", 'GlobalRole'>
+  readonly mfaEnabled: Prisma.FieldRef<"User", 'Boolean'>
+  readonly mfaSecret: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -1768,6 +2280,78 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.approvedInvoices
+ */
+export type User$approvedInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * User.approvedPurchaseOrders
+ */
+export type User$approvedPurchaseOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PurchaseOrder
+   */
+  select?: Prisma.PurchaseOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PurchaseOrder
+   */
+  omit?: Prisma.PurchaseOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PurchaseOrderInclude<ExtArgs> | null
+  where?: Prisma.PurchaseOrderWhereInput
+  orderBy?: Prisma.PurchaseOrderOrderByWithRelationInput | Prisma.PurchaseOrderOrderByWithRelationInput[]
+  cursor?: Prisma.PurchaseOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PurchaseOrderScalarFieldEnum | Prisma.PurchaseOrderScalarFieldEnum[]
+}
+
+/**
+ * User.auditLogs
+ */
+export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
 }
 
 /**

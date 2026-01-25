@@ -1,0 +1,34 @@
+information a prendre sure les etabmlissements 
+
+- nom
+- numero
+- email
+- siteweb
+- lkocalisation exate ( lieux exact , latitide ; logituide ...)
+- a propos
+- services et caracteristique (
+CUISINES
+Africaine, Moderne
+
+Types de repas
+Déjeuner, Dîner, Ouvert tard
+
+Régimes spéciaux
+Convient aux végétariens, Options végétaliennes, Options sans gluten
+
+FONCTIONNALITÉS
+Bar complet
+Parking
+Places assises
+Réservations
+Sert de l'alcool
+Wi-Fi gratuit
+)
+
+- Type d'établissement ( restaurant , span ,  hotel , ....)
+- propice pour ( diner, anivairessaire , dinee d'affaire , sortie en famille , entyre amis .... ) 
+- Horaires
+- menu
+- galerie photos organiser par categories
+- avies  note
+- Photos des clients
