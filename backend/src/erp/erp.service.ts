@@ -520,20 +520,22 @@ export class ErpService {
   }
 
   async createTransaction(companyId: string, data: any) {
+    const { id, ...rest } = data;
     return this.prisma.accountingEntry.create({
       data: {
-        ...data,
+        ...rest,
         companyId,
-        date: new Date(data.date),
+        date: data.date ? new Date(data.date) : new Date(),
       },
     });
   }
 
   async updateTransaction(id: string, data: any) {
+    const { id: _, companyId: __, ...rest } = data;
     return this.prisma.accountingEntry.update({
       where: { id },
       data: {
-        ...data,
+        ...rest,
         date: data.date ? new Date(data.date) : undefined,
       },
     });

@@ -47,17 +47,26 @@ export const useFinance = (companyId: string, filters?: any) => {
 
   const createTransactionMutation = useMutation({
     mutationFn: (data: any) => createTransaction(companyId, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['accounting', companyId] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accounting', companyId] });
+      queryClient.invalidateQueries({ queryKey: ['finance-bi', companyId] });
+    }
   });
 
   const updateTransactionMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => updateTransaction(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['accounting', companyId] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accounting', companyId] });
+      queryClient.invalidateQueries({ queryKey: ['finance-bi', companyId] });
+    }
   });
 
   const deleteTransactionMutation = useMutation({
     mutationFn: deleteTransaction,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['accounting', companyId] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accounting', companyId] });
+      queryClient.invalidateQueries({ queryKey: ['finance-bi', companyId] });
+    }
   });
 
   const invoicesQuery = useQuery({

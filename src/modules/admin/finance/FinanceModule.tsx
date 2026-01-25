@@ -103,6 +103,14 @@ export const FinanceModule: React.FC<FinanceModuleProps> = ({ companyId }) => {
   const [showScanModal, setShowScanModal] = useState(false);
   const [showPreview, setShowPreview] = useState<Quote | Invoice | null>(null);
 
+  // --- Reset filters on view change ---
+  React.useEffect(() => {
+    setFilterCategory('');
+    setFilterType('All');
+    setFilterStartDate('');
+    setFilterEndDate('');
+  }, [view]);
+
   const isLoading = financeLoading || crmLoading || stockLoading;
 
   // --- State Filtres Comptabilité ---
@@ -110,6 +118,28 @@ export const FinanceModule: React.FC<FinanceModuleProps> = ({ companyId }) => {
   const [filterEndDate, setFilterEndDate] = useState('');
   const [filterType, setFilterType] = useState<'All' | 'Debit' | 'Credit'>('All');
   const [filterCategory, setFilterCategory] = useState('');
+
+  // --- Logic Piece Comptable Automatique ---
+  const getNextAccountingRef = () => {
+    const year = new Date().getFullYear().toString().slice(-2);
+    const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+
+    // Find highest sequence in current month/year
+    const prefix = `PC${year}${month}`;
+    const monthTransactions = (accounting as Transaction[]).filter(t => t.ref?.startsWith(prefix));
+
+    let nextSeq = 1;
+    if (monthTransactions.length > 0) {
+      const sequences = monthTransactions.map(t => {
+        const part = t.ref.replace(prefix, '');
+        const num = parseInt(part);
+        return isNaN(num) ? 0 : num;
+      });
+      nextSeq = Math.max(...sequences) + 1;
+    }
+
+    return `${prefix}${nextSeq.toString().padStart(3, '0')}`;
+  };
 
   // --- Action Handlers ---
   const handlePrint = () => {
@@ -229,16 +259,31 @@ export const FinanceModule: React.FC<FinanceModuleProps> = ({ companyId }) => {
 
   // --- Calculs Rapport ---
   const filteredTransactions = useMemo(() => {
-    return (accounting as Transaction[]).filter((t) => {
-      const tDate = new Date(t.date).toISOString().split('T')[0];
-      const matchStart = !filterStartDate || tDate >= filterStartDate;
-      const matchEnd = !filterEndDate || tDate <= filterEndDate;
-      const matchType = filterType === 'All' || t.type === filterType;
-      const matchCat =
-        !filterCategory ||
-        (t.category || '').toLowerCase().includes(filterCategory.toLowerCase()) ||
-        (t.label || '').toLowerCase().includes(filterCategory.toLowerCase());
-      return matchStart && matchEnd && matchType && matchCat;
+    if (!accounting) return [];
+    const list = accounting as Transaction[];
+
+    return list.filter((t) => {
+      // 1. Date Filter
+      let passDate = true;
+      if (filterStartDate || filterEndDate) {
+        try {
+          const tDate = t.date ? new Date(t.date).toISOString().split('T')[0] : '';
+          if (filterStartDate && tDate < filterStartDate) passDate = false;
+          if (filterEndDate && tDate > filterEndDate) passDate = false;
+        } catch (e) { passDate = true; } // Keep on error
+      }
+
+      // 2. Type Filter
+      const passType = filterType === 'All' || t.type === filterType;
+
+      // 3. Search Filter
+      const query = filterCategory.toLowerCase();
+      const passSearch = !query ||
+        (t.label || '').toLowerCase().includes(query) ||
+        (t.category || '').toLowerCase().includes(query) ||
+        (t.ref || '').toLowerCase().includes(query);
+
+      return passDate && passType && passSearch;
     });
   }, [accounting, filterStartDate, filterEndDate, filterType, filterCategory]);
 
@@ -288,624 +333,420 @@ export const FinanceModule: React.FC<FinanceModuleProps> = ({ companyId }) => {
     );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex space-x-1 bg-slate-100 p-1.5 rounded-sm w-fit border border-slate-200 shadow-inner">
-          <button
-            onClick={() => setView('quotes')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-sm transition-all ${view === 'quotes' ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            <FileText size={16} /> Devis
-          </button>
-          <button
-            onClick={() => setView('invoices')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-sm transition-all ${view === 'invoices' ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            <Receipt size={16} /> Factures
-          </button>
-          <button
-            onClick={() => setView('accounting')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-sm transition-all ${view === 'accounting' ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            <Calculator size={16} /> Journal Comptable
-          </button>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      {/* --- EN-TÊTE STRATÉGIQUE --- */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
+            <div className="p-2 bg-sky-600 rounded-sm text-white shadow-lg shadow-sky-900/20">
+              <DollarSign size={28} />
+            </div>
+            Centre de Pilotage Financier
+          </h1>
+          <p className="text-slate-500 font-medium mt-1">Trésorerie, Facturation & Comptabilité analytique</p>
         </div>
 
-        <div className="flex items-center gap-2 bg-white p-1.5 border border-slate-200 rounded-sm shadow-sm">
+        <div className="flex items-center gap-2 bg-white p-2 border border-slate-200 rounded-sm shadow-sm ring-1 ring-slate-100">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-sm border border-slate-100">
             <Filter size={14} className="text-slate-400" />
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Filtres
-            </span>
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Période</span>
           </div>
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="px-3 py-1.5 text-sm font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
+            className="px-3 py-1.5 text-xs font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
           >
             {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
+              <option key={year} value={year}>{year}</option>
             ))}
           </select>
           <div className="w-px h-4 bg-slate-200"></div>
           <select
             value={selectedMonth || ''}
             onChange={(e) => setSelectedMonth(e.target.value ? Number(e.target.value) : undefined)}
-            className="px-3 py-1.5 text-sm font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
+            className="px-3 py-1.5 text-xs font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
           >
-            <option value="">Toute l'année</option>
-            {[
-              'Janvier',
-              'Février',
-              'Mars',
-              'Avril',
-              'Mai',
-              'Juin',
-              'Juillet',
-              'Août',
-              'Septembre',
-              'Octobre',
-              'Novembre',
-              'Décembre',
-            ].map((m, i) => (
-              <option key={i} value={i + 1}>
-                {m}
-              </option>
+            <option value="">Année Entière</option>
+            {['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'].map((m, i) => (
+              <option key={i} value={i + 1}>{m}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {view === 'quotes' && (
-        <>
-          <SectionHeader
-            title="Devis Clients"
-            subtitle="Gestion des offres commerciales."
-            actions={
-              <div className="flex gap-3">
-                <ExportButton data={quotes} fileName="devis_enea" />
-                <button
-                  onClick={() =>
-                    setEditingQuote({
-                      id: 'new-' + Date.now(),
-                      reference: `DEV-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
-                      clientId: '',
-                      clientName: '',
-                      date: new Date().toISOString().split('T')[0],
-                      validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                        .toISOString()
-                        .split('T')[0],
-                      items: [],
-                      totalAmount: 0,
-                      status: 'Brouillon',
-                    })
-                  }
-                  className="bg-sky-600 text-white px-5 py-2.5 rounded-sm flex items-center gap-2 hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 font-bold"
-                >
-                  <Plus size={18} /> Créer Devis
-                </button>
-              </div>
-            }
-          />
-          <DataTable<Quote>
-            data={quotes}
-            searchPlaceholder="Rechercher un devis ou client..."
-            searchKeys={['reference', 'clientName']}
-            columns={[
-              {
-                header: 'Référence',
-                accessor: (q) => (
-                  <span className="font-mono font-bold text-sky-700">{q.reference}</span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Client',
-                accessor: (q) => (
-                  <div className="py-1">
-                    <div className="font-bold text-slate-800">{q.clientName}</div>
-                    <div className="text-[10px] text-slate-400 uppercase tracking-tight">
-                      {q.clientId ? 'Client ID: ' + q.clientId.slice(0, 8) : 'Client Libre'}
-                    </div>
-                  </div>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Date',
-                accessor: (q) => (
-                  <span className="font-mono text-slate-500">
-                    {new Date(q.date).toLocaleDateString()}
-                  </span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Montant Total',
-                accessor: (q) => (
-                  <span className="font-black text-slate-900">
-                    {q.totalAmount.toLocaleString()}{' '}
-                    <span className="text-[10px] text-slate-400">CFA</span>
-                  </span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Statut',
-                accessor: (q) => (
-                  <Badge
-                    color={
-                      q.status === 'Accepté' ? 'green' : q.status === 'Envoyé' ? 'blue' : 'slate'
-                    }
-                  >
-                    {q.status}
-                  </Badge>
-                ),
-                sortable: true,
-              },
-            ]}
-            actions={(q) => (
-              <div className="flex justify-end gap-1 opacity-10 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => convertToInvoice(q)}
-                  className="p-2 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded-sm transition-all"
-                  title="Convertir en Facture"
-                >
-                  <ArrowRight size={18} />
-                </button>
-                <button
-                  onClick={() => setShowPreview(q)}
-                  className="p-2 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-sm transition-all"
-                  title="Aperçu"
-                >
-                  <Eye size={18} />
-                </button>
-                <button
-                  onClick={() => setEditingQuote(q)}
-                  className="p-2 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-sm transition-all"
-                  title="Éditer"
-                >
-                  <Settings size={18} />
-                </button>
-                <button
-                  onClick={() => {
-                    if (confirm('Supprimer ce devis ?')) deleteQuote(q.id);
-                  }}
-                  className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-sm transition-all"
-                  title="Supprimer"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            )}
-            onRowClick={(q) => setShowPreview(q)}
-          />
-        </>
-      )}
-
-      {view === 'invoices' && (
-        <>
-          <SectionHeader
-            title="Factures Clients"
-            subtitle="Suivi de la facturation et des paiements."
-            actions={
-              <div className="flex gap-3">
-                <ExportButton data={invoices} fileName="factures_enea" />
-                <button
-                  onClick={() =>
-                    setEditingInvoice({
-                      id: 'new-' + Date.now(),
-                      reference: `FACT-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
-                      clientId: '',
-                      clientName: '',
-                      date: new Date().toISOString().split('T')[0],
-                      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                        .toISOString()
-                        .split('T')[0],
-                      items: [],
-                      totalAmount: 0,
-                      paidAmount: 0,
-                      status: 'Draft',
-                    })
-                  }
-                  className="bg-sky-600 text-white px-5 py-2.5 rounded-sm flex items-center gap-2 hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 font-bold"
-                >
-                  <Plus size={18} /> Créer Facture
-                </button>
-              </div>
-            }
-          />
-          <DataTable<Invoice>
-            data={invoices}
-            searchPlaceholder="Rechercher une facture ou client..."
-            searchKeys={['reference', 'clientName']}
-            columns={[
-              {
-                header: 'Référence',
-                accessor: (inv) => (
-                  <span className="font-mono font-bold text-sky-700">{inv.reference}</span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Client',
-                accessor: (inv) => (
-                  <div className="py-1">
-                    <div className="font-bold text-slate-800">{inv.clientName}</div>
-                    <div className="text-[10px] text-slate-400 uppercase tracking-tight">
-                      {inv.clientId ? 'Client ID: ' + inv.clientId.slice(0, 8) : 'Client Libre'}
-                    </div>
-                  </div>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Détails Échéance',
-                accessor: (inv) => (
-                  <div className="py-1 text-xs">
-                    <div className="text-slate-500">
-                      Émis le {new Date(inv.date).toLocaleDateString()}
-                    </div>
-                    <div
-                      className={`font-bold ${new Date(inv.dueDate) < new Date() && inv.status !== 'Paid' ? 'text-red-500' : 'text-slate-700'}`}
-                    >
-                      Payable le {new Date(inv.dueDate).toLocaleDateString()}
-                    </div>
-                  </div>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Montant Total',
-                accessor: (inv) => (
-                  <span className="font-black text-slate-900">
-                    {inv.totalAmount.toLocaleString()}{' '}
-                    <span className="text-[10px] text-slate-400">CFA</span>
-                  </span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Reste à Payer',
-                accessor: (inv) => (
-                  <span className="font-bold text-orange-600">
-                    {(inv.totalAmount - (inv.paidAmount || 0)).toLocaleString()}{' '}
-                    <span className="text-[10px] text-slate-400">CFA</span>
-                  </span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Statut',
-                accessor: (inv) => (
-                  <Badge
-                    color={
-                      inv.status === 'Paid'
-                        ? 'green'
-                        : inv.status === 'Sent'
-                          ? 'blue'
-                          : inv.status === 'Overdue'
-                            ? 'red'
-                            : 'slate'
-                    }
-                  >
-                    {inv.status}
-                  </Badge>
-                ),
-                sortable: true,
-              },
-            ]}
-            actions={(inv) => (
-              <div className="flex justify-end gap-1 opacity-10 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => setShowPreview(inv as any)}
-                  className="p-2 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-sm transition-all"
-                  title="Aperçu"
-                >
-                  <Eye size={18} />
-                </button>
-                <button
-                  onClick={() => setEditingInvoice(inv)}
-                  className="p-2 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-sm transition-all"
-                  title="Éditer"
-                >
-                  <Settings size={18} />
-                </button>
-                <button
-                  onClick={() => {
-                    if (confirm('Supprimer cette facture ?')) deleteInvoice(inv.id);
-                  }}
-                  className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-sm transition-all"
-                  title="Supprimer"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            )}
-            onRowClick={(inv) => setShowPreview(inv as any)}
-          />
-        </>
-      )}
-
-      {view === 'accounting' && (
-        <>
-          <SectionHeader
-            title="Trésorerie"
-            subtitle="Journal des dépenses et des recettes."
-            actions={
-              <div className="flex gap-3">
-                <ExportButton data={filteredTransactions} fileName="journal_comptable" />
-                <button
-                  onClick={() => setShowScanModal(true)}
-                  className="bg-slate-800 text-white px-5 py-2.5 rounded-sm flex items-center gap-2 hover:bg-slate-900 transition-all shadow-lg font-bold border border-slate-700"
-                >
-                  <Scan size={18} /> Scanner Facture
-                </button>
-                <button
-                  onClick={() =>
-                    setEditingTransaction({
-                      id: 'new-' + Date.now(),
-                      date: new Date().toISOString().split('T')[0],
-                      ref: '',
-                      label: '',
-                      category: '',
-                      amount: 0,
-                      type: 'Debit',
-                      status: 'Validé',
-                    })
-                  }
-                  className="bg-sky-600 text-white px-5 py-2.5 rounded-sm flex items-center gap-2 hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 font-bold"
-                >
-                  <Plus size={18} /> Saisir Opération
-                </button>
-              </div>
-            }
-          />
-
-          {/* --- RAPPORT DYNAMIQUE --- */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-red-500 uppercase tracking-wider mb-1">
-                  Dépenses (Débit)
-                </p>
-                <p className="text-3xl font-black text-slate-900">
-                  {report.debit.toLocaleString()}{' '}
-                  <span className="text-sm font-normal text-slate-400 whitespace-nowrap">CFA</span>
-                </p>
-              </div>
-              <div className="p-3 bg-red-50 text-red-500 rounded-sm">
-                <ArrowUpCircle size={32} />
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-green-500 uppercase tracking-wider mb-1">
-                  Recettes (Crédit)
-                </p>
-                <p className="text-3xl font-black text-slate-900">
-                  {report.credit.toLocaleString()}{' '}
-                  <span className="text-sm font-normal text-slate-400 whitespace-nowrap">CFA</span>
-                </p>
-              </div>
-              <div className="p-3 bg-green-50 text-green-500 rounded-sm">
-                <ArrowDownCircle size={32} />
-              </div>
-            </div>
-            <div
-              className={`p-6 rounded-sm border flex items-center justify-between shadow-lg ${report.balance >= 0 ? 'bg-sky-600 border-sky-500 text-white' : 'bg-orange-600 border-orange-500 text-white'}`}
-            >
-              <div>
-                <p className="text-xs font-bold opacity-80 uppercase tracking-wider mb-1">
-                  Solde Période
-                </p>
-                <p className="text-3xl font-black">
-                  {report.balance > 0 ? '+' : ''}
-                  {report.balance.toLocaleString()}{' '}
-                  <span className="text-sm font-normal opacity-80 whitespace-nowrap">CFA</span>
-                </p>
-              </div>
-              <div className="p-3 bg-white/20 rounded-sm">
-                <Calculator size={32} />
-              </div>
-            </div>
+      {/* --- TABLEAU DE BORD DE SANTÉ --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Cash Position */}
+        <div className={`p-6 rounded-sm shadow-xl flex flex-col justify-between relative overflow-hidden group ${report.balance >= 0 ? 'bg-slate-900' : 'bg-orange-600'} text-white`}>
+          <div className="relative z-10">
+            <p className="text-[10px] font-black opacity-60 uppercase tracking-widest mb-1">Trésorerie Nette</p>
+            <h3 className="text-3xl font-black tracking-tighter">{report.balance.toLocaleString()} <span className="text-sm opacity-50 font-normal underline decoration-sky-500 underline-offset-4">CFA</span></h3>
           </div>
-
-          {/* --- INDICATEURS AVANCÉS --- */}
           {bi && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-slate-900 p-5 rounded-sm text-white shadow-xl border border-slate-800">
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 text-sky-400">
-                  Cash Runway (Prévu)
-                </p>
-                <div className="flex items-end gap-2">
-                  <span className="text-2xl font-black">
-                    {bi.health?.runway === -1 ? '∞' : bi.health?.runway}
-                  </span>
-                  <span className="text-[10px] font-bold text-slate-400 mb-1.5 uppercase">Mois d'autonomie</span>
-                </div>
-                <div className="mt-3 w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                  <div className="bg-sky-500 h-full" style={{ width: bi.health?.runway > 6 ? '100%' : `${(bi.health?.runway / 6) * 100}%` }}></div>
-                </div>
-              </div>
-
-              <div className="bg-white p-5 rounded-sm border border-slate-200 shadow-sm">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                  Charge Fiscale Est.
-                </p>
-                <div className="flex items-end gap-1">
-                  <span className="text-xl font-black text-slate-800">
-                    {bi.tax?.netTaxToPay?.toLocaleString()}
-                  </span>
-                  <span className="text-[9px] font-bold text-slate-400 mb-1 uppercase">CFA (TVA)</span>
-                </div>
-                <p className="text-[9px] text-slate-400 mt-1 italic">Projection sur base des flux</p>
-              </div>
-
-              <div className="bg-white p-5 rounded-sm border border-slate-200 shadow-sm">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                  Marge Nette (BI)
-                </p>
-                <div className="flex items-end gap-1">
-                  <span className={`text-xl font-black ${bi.margin > 20 ? 'text-green-600' : 'text-orange-600'}`}>
-                    {bi.margin?.toFixed(1)}%
-                  </span>
-                </div>
-                <div className="mt-2 text-[9px] font-bold text-slate-400 uppercase">Rentabilité Actuelle</div>
-              </div>
-
-              <div className="bg-slate-50 p-5 rounded-sm border border-slate-200 shadow-sm flex items-center justify-center">
-                <div className="w-full h-12">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={bi.trends}>
-                      <Area type="monotone" dataKey="revenue" stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.1} strokeWidth={2} />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+            <div className={`mt-6 flex items-center gap-2 text-[10px] font-black uppercase relative z-10 ${report.balance >= 0 ? 'text-sky-400' : 'text-white'}`}>
+              <Sparkles size={14} className={report.balance >= 0 ? 'animate-pulse' : ''} /> {bi.health?.runway} mois d'autonomie
             </div>
           )}
+          <DollarSign size={100} className="absolute -right-8 -bottom-8 opacity-5 group-hover:scale-110 transition-transform duration-700" />
+        </div>
 
-          {/* --- ZONE DE FILTRES --- */}
-          <div className="bg-slate-50 p-6 rounded-sm border border-slate-200 mb-6 group transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-200/50">
-            <div className="flex flex-col md:flex-row gap-6 items-end">
-              <div className="flex-1 space-y-2">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">
-                  Période du / au
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="date"
-                    className="w-full bg-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all outline-none"
-                    value={filterStartDate}
-                    onChange={(e) => setFilterStartDate(e.target.value)}
-                  />
-                  <input
-                    type="date"
-                    className="w-full bg-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all outline-none"
-                    value={filterEndDate}
-                    onChange={(e) => setFilterEndDate(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="w-full md:w-64 space-y-2">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">
-                  Flux de trésorerie
-                </label>
-                <select
-                  className="w-full bg-white px-4 py-2.5 rounded-sm border border-slate-200 text-sm focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all outline-none"
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value as any)}
+        {/* Inflow */}
+        <div className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm border-t-4 border-t-emerald-500">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 text-emerald-600">Total Encaissé</p>
+              <h3 className="text-2xl font-black text-slate-900">{report.credit.toLocaleString()}</h3>
+            </div>
+            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-sm"><ArrowDownCircle size={20} /></div>
+          </div>
+          <div className="mt-4 flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Flux Entrants Validés
+          </div>
+        </div>
+
+        {/* Outflow */}
+        <div className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm border-t-4 border-t-red-500">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 text-red-600">Total Décaisse</p>
+              <h3 className="text-2xl font-black text-slate-900">{report.debit.toLocaleString()}</h3>
+            </div>
+            <div className="p-2 bg-red-50 text-red-500 rounded-sm"><ArrowUpCircle size={20} /></div>
+          </div>
+          <div className="mt-4 flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase">
+            Charge Fiscale Est: <span className="text-orange-600 font-black">{bi?.tax?.netTaxToPay?.toLocaleString()} CFA</span>
+          </div>
+        </div>
+
+        {/* Growth Graph Card */}
+        <div className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm border-t-4 border-t-sky-500 flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-white to-slate-50">
+          <div>
+            <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest mb-1">Performance CA</p>
+            <h3 className="text-xs font-bold text-slate-500">Tendance sur 6 mois</h3>
+          </div>
+          <div className="h-16 w-full mt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={bi?.trends}>
+                <defs>
+                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="revenue" stroke="#0ea5e9" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* --- HUB D'ACTIONS ET NAVIGATION COMPOSITE --- */}
+      <div className="flex flex-col lg:flex-row gap-8">
+
+        {/* Left Control Panel */}
+        <div className="lg:w-72 space-y-6 shrink-0">
+          <div className="bg-white border border-slate-200 rounded-sm shadow-md overflow-hidden">
+            <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-80">Explorateur</span>
+              <ArrowRight size={14} className="text-sky-400" />
+            </div>
+            <div className="p-2 space-y-1">
+              {[
+                { id: 'quotes', label: 'Devis & Offres', icon: <FileText size={18} />, count: quotes?.length },
+                { id: 'invoices', label: 'Factures Clients', icon: <Receipt size={18} />, count: invoices?.length },
+                { id: 'accounting', label: 'Grand Livre Caisse', icon: <Calculator size={18} />, count: accounting?.length },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setView(tab.id as any)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-sm text-sm font-bold transition-all ${view === tab.id
+                    ? 'bg-slate-100 text-slate-900 border-l-4 border-sky-600 shadow-sm'
+                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
+                    }`}
                 >
-                  <option value="All">Tous les flux</option>
-                  <option value="Credit">Recettes (Entrants)</option>
-                  <option value="Debit">Dépenses (Sortants)</option>
-                </select>
-              </div>
-              <div className="flex-1 space-y-2">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">
-                  Recherche (Libellé, Catégorie)
-                </label>
-                <div className="relative">
-                  <Filter
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                    size={16}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Filtrer par mot-clé..."
-                    className="w-full bg-white pl-11 pr-4 py-2.5 rounded-sm border border-slate-200 text-sm focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 transition-all outline-none"
-                    value={filterCategory}
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                  />
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setFilterStartDate('');
-                  setFilterEndDate('');
-                  setFilterType('All');
-                  setFilterCategory('');
-                }}
-                className="p-3 bg-slate-200 text-slate-500 hover:bg-slate-300 rounded-sm transition-all"
-                title="Réinitialiser"
-              >
-                <div className="w-5 h-5 flex items-center justify-center font-black">×</div>
-              </button>
+                  <div className="flex items-center gap-3">
+                    <span className={view === tab.id ? 'text-sky-600' : ''}>{tab.icon}</span>
+                    {tab.label}
+                  </div>
+                  {typeof tab.count === 'number' && (
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${view === tab.id ? 'bg-sky-600 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
           </div>
 
-          <DataTable<Transaction>
-            data={filteredTransactions}
-            searchPlaceholder="Filtrer dans les résultats (Libellé, Catégorie)..."
-            searchKeys={['label', 'category']}
-            columns={[
-              {
-                header: 'Date de Saisie',
-                accessor: (t) => (
-                  <span className="font-mono text-slate-500 text-xs">
-                    {new Date(t.date).toLocaleDateString()}
-                  </span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Libellé & Catégorie',
-                accessor: (t) => (
-                  <div className="py-1">
-                    <div className="font-bold text-slate-800">{t.label}</div>
-                    <div className="text-[10px] py-0.5 px-2 bg-slate-100 rounded inline-block text-slate-500 font-bold uppercase tracking-tighter mt-1">
-                      {t.category}
+        </div>
+
+        {/* --- ZONE DE DONNÉES CENTRALE --- */}
+        <div className="flex-1 space-y-4 min-w-0">
+          {/* Header & Main Search */}
+          <div className="bg-white border border-slate-200 rounded-sm shadow-sm p-6 space-y-6">
+            <div className="flex justify-between items-center sm:flex-row flex-col gap-4">
+              <div>
+                <h2 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                  {view === 'quotes' ? 'Portefeuille Devis' : view === 'invoices' ? 'Base Facturation' : 'Grand Livre Comptable'}
+                  <span className="p-1 px-2 text-[10px] bg-sky-50 text-sky-600 rounded-full font-black uppercase tracking-widest">Live</span>
+                </h2>
+                <p className="text-xs text-slate-500 font-medium">Gestion et pilotage des flux financiers</p>
+              </div>
+              <div className="flex gap-2">
+                {/* Export remains here as a secondary utility */}
+                <ExportButton data={view === 'quotes' ? quotes : view === 'invoices' ? invoices : filteredTransactions} fileName={`export_${view}`} />
+              </div>
+            </div>
+
+            {/* Centralized Imposing Search Bar */}
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1 group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-600 transition-colors" size={20} />
+                <input
+                  type="text"
+                  placeholder={`Rechercher intensément dans ${view === 'quotes' ? 'les devis' : view === 'invoices' ? 'les factures' : 'le grand livre'}...`}
+                  className="w-full bg-slate-50 border-2 border-slate-100 pl-12 pr-4 py-3.5 text-sm rounded-sm outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-600 focus:bg-white transition-all font-bold placeholder:text-slate-400 shadow-inner"
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                />
+              </div>
+
+              <div className="flex gap-2 shrink-0">
+                {/* Quick Contextual Actions Moved into the Search row for focus */}
+                {view === 'quotes' && (
+                  <button
+                    onClick={() => setEditingQuote({
+                      id: 'new-' + Date.now(),
+                      reference: `DEV-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
+                      clientId: '', clientName: '',
+                      date: new Date().toISOString().split('T')[0],
+                      validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                      items: [], totalAmount: 0, status: 'Brouillon',
+                    })}
+                    className="bg-sky-600 text-white px-6 py-3.5 rounded-sm text-xs font-black uppercase tracking-widest hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 active:scale-95 flex items-center gap-2 whitespace-nowrap"
+                  >
+                    <Plus size={16} /> Nouveau Devis
+                  </button>
+                )}
+
+                {view === 'accounting' && (
+                  <>
+                    <button
+                      onClick={() => setShowScanModal(true)}
+                      className="bg-slate-800 text-white px-6 py-3.5 rounded-sm text-xs font-black uppercase tracking-widest hover:bg-slate-900 transition-all shadow-lg active:scale-95 flex items-center gap-2"
+                    >
+                      <Scan size={16} /> Scan IA
+                    </button>
+                    <button
+                      onClick={() => setEditingTransaction({
+                        id: 'new-' + Date.now(),
+                        date: new Date().toISOString().split('T')[0],
+                        ref: getNextAccountingRef(),
+                        label: '', category: '', amount: 0, type: 'Debit', status: 'Validé',
+                      })}
+                      className="bg-sky-600 text-white px-6 py-3.5 rounded-sm text-xs font-black uppercase tracking-widest hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 active:scale-95 flex items-center gap-2 whitespace-nowrap"
+                    >
+                      <Plus size={16} /> Saisie
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-sm shadow-sm">
+
+            <div className="p-0 overflow-x-auto">
+              {view === 'quotes' && (
+                <DataTable<Quote>
+                  data={quotes}
+                  columns={[
+                    {
+                      header: 'Référence',
+                      accessor: (q) => <span className="font-mono font-bold text-sky-700">{q.reference}</span>,
+                    },
+                    {
+                      header: 'Client',
+                      accessor: (q) => <span className="font-bold text-slate-800">{q.clientName}</span>,
+                    },
+                    {
+                      header: 'Date / Validité',
+                      accessor: (q) => (
+                        <div className="flex flex-col text-[10px]">
+                          <span className="text-slate-500">Le {new Date(q.date).toLocaleDateString()}</span>
+                          <span className="font-bold text-slate-400 uppercase italic">Expire le {new Date(q.validUntil).toLocaleDateString()}</span>
+                        </div>
+                      ),
+                    },
+                    {
+                      header: 'Montant TTC',
+                      accessor: (q) => <span className="font-black text-slate-900">{(q.totalAmount * 1.18).toLocaleString()} CFA</span>,
+                    },
+                    {
+                      header: 'État',
+                      accessor: (q) => <Badge color={q.status === 'Accepté' ? 'green' : q.status === 'Envoyé' ? 'blue' : 'slate'}>{q.status}</Badge>,
+                    },
+                  ]}
+                  actions={(q) => (
+                    <div className="flex justify-end gap-1">
+                      <button onClick={() => convertToInvoice(q)} className="p-2 text-slate-400 hover:text-green-600 transition-all" title="En Facture"><ArrowRight size={18} /></button>
+                      <button onClick={() => setShowPreview(q)} className="p-2 text-slate-400 hover:text-sky-600 transition-all"><Eye size={18} /></button>
+                      <button onClick={() => setEditingQuote(q)} className="p-2 text-slate-400 hover:text-sky-600 transition-all"><Settings size={18} /></button>
+                      <button onClick={() => { if (confirm('Supprimer ?')) deleteQuote(q.id); }} className="p-2 text-slate-400 hover:text-red-600 transition-all"><Trash2 size={18} /></button>
+                    </div>
+                  )}
+                />
+              )}
+
+              {view === 'invoices' && (
+                <DataTable<Invoice>
+                  data={invoices}
+                  columns={[
+                    {
+                      header: 'N° Facture',
+                      accessor: (inv) => <span className="font-mono font-bold text-sky-700">{inv.reference}</span>,
+                    },
+                    {
+                      header: 'Client',
+                      accessor: (inv) => <span className="font-bold text-slate-800">{inv.clientName}</span>,
+                    },
+                    {
+                      header: 'Détails Échéance',
+                      accessor: (inv) => (
+                        <span className={`text-[10px] font-black px-2 py-1 rounded-sm ${new Date(inv.dueDate) < new Date() && inv.status !== 'Paid' ? 'bg-red-50 text-red-600' : 'bg-slate-50 text-slate-600'}`}>
+                          {new Date(inv.dueDate).toLocaleDateString()}
+                        </span>
+                      ),
+                    },
+                    {
+                      header: 'Montant Net / Reste',
+                      accessor: (inv) => (
+                        <div className="flex flex-col">
+                          <span className="font-black text-slate-900">{(inv.totalAmount * 1.18).toLocaleString()} CFA</span>
+                          <span className="text-[10px] text-orange-600 font-bold uppercase tracking-tighter">Reste: {(inv.totalAmount - (inv.paidAmount || 0)).toLocaleString()}</span>
+                        </div>
+                      ),
+                    },
+                    {
+                      header: 'Statut',
+                      accessor: (inv) => <Badge color={inv.status === 'Paid' ? 'green' : inv.status === 'Sent' ? 'blue' : 'slate'}>{inv.status}</Badge>,
+                    },
+                  ]}
+                  actions={(inv) => (
+                    <div className="flex justify-end gap-1">
+                      <button onClick={() => setShowPreview(inv as any)} className="p-2 text-slate-400 hover:text-sky-600 transition-all"><Eye size={18} /></button>
+                      <button onClick={() => setEditingInvoice(inv)} className="p-2 text-slate-400 hover:text-sky-600 transition-all"><Settings size={18} /></button>
+                      <button onClick={() => { if (confirm('Supprimer ?')) deleteInvoice(inv.id); }} className="p-2 text-slate-400 hover:text-red-600 transition-all"><Trash2 size={18} /></button>
+                    </div>
+                  )}
+                />
+              )}
+
+              {view === 'accounting' && (
+                <>
+                  <div className="bg-slate-900 p-4 border-b border-slate-800 flex justify-between items-center">
+                    <div className="flex gap-4">
+                      <select
+                        className="bg-slate-800 text-white text-[10px] font-black border-none rounded-sm px-3 py-2 outline-none cursor-pointer focus:ring-1 focus:ring-sky-500"
+                        value={filterType}
+                        onChange={(e) => setFilterType(e.target.value as any)}
+                      >
+                        <option value="All">TOUS LES FLUX</option>
+                        <option value="Credit">RECETTES (+)</option>
+                        <option value="Debit">DÉPENSES (-)</option>
+                      </select>
+                    </div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                      Affichage de {filteredTransactions.length} écriture(s)
                     </div>
                   </div>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Débit (-)',
-                accessor: (t) => (
-                  <span className="text-red-600 font-black">
-                    {t.type === 'Debit' ? t.amount.toLocaleString() : '-'}
-                  </span>
-                ),
-                sortable: true,
-              },
-              {
-                header: 'Crédit (+)',
-                accessor: (t) => (
-                  <span className="text-green-600 font-black">
-                    {t.type === 'Credit' ? t.amount.toLocaleString() : '-'}
-                  </span>
-                ),
-                sortable: true,
-              },
-            ]}
-            actions={(t) => (
-              <div className="flex justify-end gap-1 opacity-10 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => setEditingTransaction(t)}
-                  className="p-2 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-sm transition-all"
-                  title="Modifier"
-                >
-                  <Settings size={18} />
-                </button>
-                <button
-                  onClick={() => {
-                    if (confirm('Supprimer cette écriture ?')) deleteTransaction(t.id);
-                  }}
-                  className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-sm transition-all"
-                  title="Supprimer"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            )}
-            onRowClick={(t) => setEditingTransaction(t)}
-          />
-        </>
-      )}
+                  {filteredTransactions.length === 0 && (accounting as Transaction[]).length > 0 && (
+                    <div className="p-8 text-center bg-amber-50 border-b border-amber-100">
+                      <p className="text-amber-700 font-bold text-sm">Vos filtres cachent toutes les données ({(accounting as Transaction[]).length} au total).</p>
+                      <button
+                        onClick={() => { setFilterCategory(''); setFilterType('All'); setFilterStartDate(''); setFilterEndDate(''); }}
+                        className="mt-2 text-xs font-black uppercase text-amber-900 underline"
+                      >
+                        Réinitialiser tous les filtres
+                      </button>
+                    </div>
+                  )}
+
+                  <DataTable<Transaction>
+                    data={filteredTransactions}
+                    searchPlaceholder="Rechercher dans le journal..."
+                    searchKeys={['label', 'ref', 'category']}
+                    columns={[
+                      {
+                        header: 'Date',
+                        accessor: (t) => (
+                          <span className="font-mono text-xs text-slate-500 whitespace-nowrap">
+                            {t.date ? new Date(t.date).toLocaleDateString() : '-'}
+                          </span>
+                        ),
+                      },
+                      {
+                        header: 'Réf. Pièce',
+                        accessor: (t) => <span className="font-mono font-black text-sky-600 text-xs">{t.ref || 'PROV'}</span>,
+                      },
+                      {
+                        header: 'Libellé & Catégorie',
+                        accessor: (t) => (
+                          <div className="flex flex-col py-1">
+                            <span className="font-bold text-slate-800 text-sm">{t.label || 'Sans libellé'}</span>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t.category || 'GÉNÉRAL'}</span>
+                          </div>
+                        ),
+                      },
+                      {
+                        header: 'Flux Débit / Crédit',
+                        accessor: (t) => (
+                          <div className="flex items-center gap-4">
+                            <div className="w-24 text-right">
+                              {t.type === 'Debit' ? (
+                                <span className="font-black text-red-600">-{t.amount?.toLocaleString()}</span>
+                              ) : (
+                                <span className="text-slate-200">-</span>
+                              )}
+                            </div>
+                            <div className="w-px h-6 bg-slate-100"></div>
+                            <div className="w-24 text-left">
+                              {t.type === 'Credit' ? (
+                                <span className="font-black text-emerald-600">+{t.amount?.toLocaleString()}</span>
+                              ) : (
+                                <span className="text-slate-200">-</span>
+                              )}
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    actions={(t) => (
+                      <div className="flex justify-end gap-1">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setEditingTransaction(t); }}
+                          className="p-2 text-slate-400 hover:text-sky-600 transition-all"
+                        >
+                          <Settings size={18} />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm('Supprimer cette écriture ?')) deleteTransaction(t.id);
+                          }}
+                          className="p-2 text-slate-400 hover:text-red-600 transition-all"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    )}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <QuoteModal
         isOpen={!!editingQuote}

@@ -1,12 +1,19 @@
 import { apiFetch } from '@/lib/api-client';
 
+const cleanParams = (params?: any) => {
+  if (!params) return '';
+  const filtered = Object.fromEntries(
+    Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== ''),
+  ) as Record<string, string>;
+  const query = new URLSearchParams(filtered).toString();
+  return query ? `?${query}` : '';
+};
+
 export const fetchQuotes = (companyId: string, params?: any) => {
-  const query = params ? `?${new URLSearchParams(params).toString()}` : '';
-  return apiFetch(`/erp/${companyId}/quotes${query}`);
+  return apiFetch(`/erp/${companyId}/quotes${cleanParams(params)}`);
 };
 export const fetchAccounting = (companyId: string, params?: any) => {
-  const query = params ? `?${new URLSearchParams(params).toString()}` : '';
-  return apiFetch(`/erp/${companyId}/accounting${query}`);
+  return apiFetch(`/erp/${companyId}/accounting${cleanParams(params)}`);
 };
 
 export const createQuote = (companyId: string, data: any) =>
@@ -45,8 +52,7 @@ export const deleteTransaction = (id: string) =>
 
 // --- INVOICES ---
 export const fetchInvoices = (companyId: string, params?: any) => {
-  const query = params ? `?${new URLSearchParams(params).toString()}` : '';
-  return apiFetch(`/erp/${companyId}/invoices${query}`);
+  return apiFetch(`/erp/${companyId}/invoices${cleanParams(params)}`);
 };
 
 export const createInvoice = (companyId: string, data: any) =>
