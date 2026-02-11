@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
       port: 3001,
       host: '0.0.0.0',
       allowedHosts: [
-        "zion-unloveable-sonja.ngrok-free.dev"
+        "russel-unclinging-incalculably.ngrok-free.dev"
       ]
     },
     plugins: [react()],

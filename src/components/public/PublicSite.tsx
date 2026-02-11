@@ -80,9 +80,8 @@ export const PublicSite: React.FC<PublicSiteProps> = ({ content, onAdminClick })
     <div className="min-h-screen bg-corporate-50 font-sans text-corporate-900 selection:bg-enea-accent selection:text-white">
       {/* Modern Navbar */}
       <nav
-        className={`fixed w-full z-50 transition-all duration-500 ${
-          scrolled ? 'glass-card shadow-2xl shadow-corporate-900/5 py-4' : 'bg-transparent py-8'
-        }`}
+        className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'glass-card shadow-2xl shadow-corporate-900/5 py-4' : 'bg-transparent py-8'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -107,9 +106,8 @@ export const PublicSite: React.FC<PublicSiteProps> = ({ content, onAdminClick })
                 <button
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
-                  className={`text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-enea-accent relative group/link ${
-                    scrolled ? 'text-corporate-600' : 'text-white/90'
-                  }`}
+                  className={`text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-enea-accent relative group/link ${scrolled ? 'text-corporate-600' : 'text-white/90'
+                    }`}
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-enea-accent transition-all group-hover/link:w-full"></span>
@@ -119,11 +117,10 @@ export const PublicSite: React.FC<PublicSiteProps> = ({ content, onAdminClick })
               <div className="pl-6 border-l border-white/10 flex items-center gap-6">
                 <button
                   onClick={onAdminClick}
-                  className={`p-2.5 transition-all ${
-                    scrolled
+                  className={`p-2.5 transition-all ${scrolled
                       ? 'bg-corporate-100 text-corporate-400 hover:text-corporate-900'
                       : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
-                  }`}
+                    }`}
                   title="Système Interne"
                 >
                   <Lock size={16} />
@@ -188,25 +185,82 @@ export const PublicSite: React.FC<PublicSiteProps> = ({ content, onAdminClick })
       </nav>
 
       <main>
-        <HeroSection
-          content={content}
-          onCtaClick={() => scrollToSection('contact')}
-          onSecondaryClick={() => scrollToSection('realisations')}
-        />
+        {content.hero ? (
+          <>
+            <HeroSection
+              content={content}
+              onCtaClick={() => scrollToSection('contact')}
+              onSecondaryClick={() => scrollToSection('realisations')}
+            />
 
-        <AboutSection about={content.about} />
+            {content.about && <AboutSection about={content.about} />}
 
-        <StatsSection stats={content.stats} />
+            {content.stats && <StatsSection stats={content.stats} />}
 
-        <ServicesSection services={content.services} />
+            {content.services && <ServicesSection services={content.services} />}
 
-        <GallerySection realizations={content.realizations} />
+            {content.realizations && <GallerySection realizations={content.realizations} />}
 
-        <LocationsSection locations={content.locations} currentCountry={content.country} />
+            {content.locations && <LocationsSection locations={content.locations} currentCountry={content.country} />}
 
-        <CareersSection careers={content.careers} />
+            {content.careers && <CareersSection careers={content.careers} />}
 
-        <ContactSection contact={content.contact} entityName={content.entityName} />
+            {content.contact && <ContactSection contact={content.contact} entityName={content.entityName} />}
+          </>
+        ) : (
+          <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4">
+            <div className="max-w-2xl w-full text-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="space-y-4">
+                <h1 className="text-6xl font-black text-white tracking-tight">
+                  {content.entityName}
+                </h1>
+                <div className="flex items-center justify-center gap-3 text-slate-400">
+                  <span className="text-3xl">{content.flag}</span>
+                  <span className="text-lg font-medium">{content.country}</span>
+                </div>
+              </div>
+
+              <div className="bg-slate-800/50 border border-slate-700 rounded-sm p-8 backdrop-blur-sm">
+                <p className="text-slate-300 text-lg leading-relaxed mb-6">
+                  Le site public de cette entreprise n'est pas encore configuré.
+                </p>
+                <p className="text-slate-400 text-sm">
+                  Pour accéder au système de gestion, veuillez vous connecter à l'espace administrateur.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={onAdminClick}
+                  className="px-8 py-4 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm uppercase tracking-wider rounded-sm transition-all shadow-lg shadow-sky-600/20 active:scale-95"
+                >
+                  <Lock className="inline-block mr-2" size={18} />
+                  Accéder à l'Administration
+                </button>
+              </div>
+
+              {(content.email || content.phone) && (
+                <div className="pt-8 border-t border-slate-700 space-y-2">
+                  <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Contact</p>
+                  {content.email && (
+                    <p className="text-slate-400 text-sm">
+                      <a href={`mailto:${content.email}`} className="hover:text-sky-400 transition-colors">
+                        {content.email}
+                      </a>
+                    </p>
+                  )}
+                  {content.phone && (
+                    <p className="text-slate-400 text-sm">
+                      <a href={`tel:${content.phone}`} className="hover:text-sky-400 transition-colors">
+                        {content.phone}
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Modern Footer */}

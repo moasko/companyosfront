@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { CompaniesModule } from './companies/companies.module';
-import { CmsModule } from './cms/cms.module';
 import { ErpModule } from './erp/erp.module';
 import { UploadModule } from './upload/upload.module';
 import { SettingsModule } from './settings/settings.module';
@@ -26,7 +25,6 @@ import { join } from 'path';
     QueueModule,
     AuthModule,
     CompaniesModule,
-    CmsModule,
     ErpModule,
     UploadModule,
     SettingsModule,

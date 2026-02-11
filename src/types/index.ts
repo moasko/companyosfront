@@ -343,41 +343,42 @@ export interface SiteContent {
   phone?: string;
   email?: string;
 
-  seo: SEOConfig;
-  hero: {
+  // CMS fields (optional - CMS module has been removed)
+  seo?: SEOConfig;
+  hero?: {
     title: string;
     subtitle: string;
     tagline: string;
     imageUrl?: string;
   };
-  about: {
+  about?: {
     title: string;
     description: string;
     vision: string;
     mission: string;
     values: string;
   };
-  services: ServiceItem[];
-  stats: StatItem[];
-  locations: OfficeLocation[];
-  contact: {
+  services?: ServiceItem[];
+  stats?: StatItem[];
+  locations?: OfficeLocation[];
+  contact?: {
     email: string;
     phone: string;
     address: string;
     hours: string;
   };
-  realizations: {
+  realizations?: {
     works: string[];
     gallery: GalleryItem[];
   };
-  careers: {
+  careers?: {
     title: string;
     subtitle: string;
     description: string;
     contactEmail: string;
     openings: CareerItem[];
   };
-  clients: string[];
+  clients?: string[];
 
   // Modules ERP
   erp: {

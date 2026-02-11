@@ -408,7 +408,7 @@ export const StockModule: React.FC<StockModuleProps> = ({ companyId }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex justify-between items-center gap-4">
         <div className="flex space-x-1 bg-slate-100 p-1.5 rounded-sm w-fit border border-slate-200 shadow-inner overflow-x-auto max-w-full">
           <button
             onClick={() => setActiveTab('overview')}
@@ -447,52 +447,6 @@ export const StockModule: React.FC<StockModuleProps> = ({ companyId }) => {
             Inventaire
           </button>
         </div>
-
-        <div className="flex items-center gap-2 bg-white p-1.5 border border-slate-200 rounded-sm shadow-sm">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-sm border border-slate-100">
-            {/* Using Filter icon but check import */}
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Filtres
-            </span>
-          </div>
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="px-3 py-1.5 text-sm font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
-          >
-            {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <div className="w-px h-4 bg-slate-200"></div>
-          <select
-            value={selectedMonth || ''}
-            onChange={(e) => setSelectedMonth(e.target.value ? Number(e.target.value) : undefined)}
-            className="px-3 py-1.5 text-sm font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
-          >
-            <option value="">Toute l'année</option>
-            {[
-              'Janvier',
-              'Février',
-              'Mars',
-              'Avril',
-              'Mai',
-              'Juin',
-              'Juillet',
-              'Août',
-              'Septembre',
-              'Octobre',
-              'Novembre',
-              'Décembre',
-            ].map((m, i) => (
-              <option key={i} value={i + 1}>
-                {m}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
 
       {activeTab === 'overview' && (
@@ -501,6 +455,41 @@ export const StockModule: React.FC<StockModuleProps> = ({ companyId }) => {
             title="Tableau de Bord Logistique"
             subtitle="Analyse en temps réel de vos stocks et flux"
           />
+
+          <div className="flex items-center gap-2 bg-white p-1.5 border border-slate-200 rounded-sm shadow-sm w-fit">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-sm border border-slate-100">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                Période
+              </span>
+            </div>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="px-3 py-1.5 text-sm font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
+            >
+              {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+            <div className="w-px h-4 bg-slate-200"></div>
+            <select
+              value={selectedMonth || ''}
+              onChange={(e) => setSelectedMonth(e.target.value ? Number(e.target.value) : undefined)}
+              className="px-3 py-1.5 text-sm font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
+            >
+              <option value="">Toute l'année</option>
+              {[
+                'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
+              ].map((m, i) => (
+                <option key={i} value={i + 1}>
+                  {m}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm">
@@ -803,51 +792,76 @@ export const StockModule: React.FC<StockModuleProps> = ({ companyId }) => {
 
       {activeTab === 'products' && (
         <>
-          <SectionHeader
-            title="Inventaire des articles"
-            subtitle={`${data.stock.length} articles référencés`}
-            actions={
-              <div className="flex gap-3">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Scan code-barres ou recherche..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2.5 border border-slate-200 rounded-sm w-64 md:w-80 focus:outline-none focus:border-sky-500 font-bold text-sm bg-white shadow-sm"
-                    autoFocus
-                  />
-                  <div className="absolute left-3 top-3 text-slate-400">
-                    <ScanBarcode size={18} />
-                  </div>
-                </div>
-                <ExportButton data={stock} fileName="inventaire_stock" />
-                <button
-                  onClick={() =>
-                    setEditingProduct({
-                      id: 'new-' + Date.now(),
-                      type: 'Produit',
-                      ref: generateRef(),
-                      barcode: generateBarcode(),
-                      name: '',
-                      category: '',
-                      categoryId: '',
-                      supplierId: '',
-                      quantity: 0,
-                      unit: 'u',
-                      minThreshold: 5,
-                      location: '',
-                      value: 0,
-                      status: 'Brouillon',
-                    } as any)
-                  }
-                  className="bg-sky-600 text-white px-5 py-2.5 rounded-sm flex items-center gap-2 hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 font-bold"
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-black text-slate-900">Inventaire des articles</h2>
+              <p className="text-sm text-slate-500 font-medium mt-1">{data.stock.length} articles référencés</p>
+
+              <div className="mt-4 flex items-center gap-2 bg-white p-1 border border-slate-200 rounded-sm shadow-sm w-fit">
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(Number(e.target.value))}
+                  className="px-3 py-1.5 text-xs font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
                 >
-                  <Plus size={18} /> Ajouter un article
-                </button>
+                  {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                <div className="w-px h-3 bg-slate-200"></div>
+                <select
+                  value={selectedMonth || ''}
+                  onChange={(e) => setSelectedMonth(e.target.value ? Number(e.target.value) : undefined)}
+                  className="px-3 py-1.5 text-xs font-bold text-slate-700 bg-transparent outline-none cursor-pointer hover:bg-slate-50 rounded-sm"
+                >
+                  <option value="">Toute l'année</option>
+                  {['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'].map((m, i) => (
+                    <option key={i} value={i + 1}>{m}</option>
+                  ))}
+                </select>
               </div>
-            }
-          />
+            </div>
+            <div className="flex gap-3">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Scan code-barres ou recherche..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2.5 border border-slate-200 rounded-sm w-64 md:w-80 focus:outline-none focus:border-sky-500 font-bold text-sm bg-white shadow-sm"
+                  autoFocus
+                />
+                <div className="absolute left-3 top-3 text-slate-400">
+                  <ScanBarcode size={18} />
+                </div>
+              </div>
+              <ExportButton data={stock} fileName="inventaire_stock" />
+              <button
+                onClick={() =>
+                  setEditingProduct({
+                    id: 'new-' + Date.now(),
+                    type: 'Produit',
+                    ref: generateRef(),
+                    barcode: generateBarcode(),
+                    name: '',
+                    category: '',
+                    categoryId: '',
+                    supplierId: '',
+                    quantity: 0,
+                    unit: 'u',
+                    minThreshold: 5,
+                    location: '',
+                    value: 0,
+                    status: 'Brouillon',
+                  } as any)
+                }
+                className="bg-sky-600 text-white px-5 py-2.5 rounded-sm flex items-center gap-2 hover:bg-sky-700 transition-all shadow-lg shadow-sky-900/10 font-bold"
+              >
+                <Plus size={18} /> Ajouter un article
+              </button>
+            </div>
+          </div>
           <ProductList
             products={filteredStock}
             onEdit={setEditingProduct}

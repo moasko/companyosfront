@@ -45,7 +45,7 @@ import { CRMModule } from '@/modules/admin/crm/CRMModule';
 import { FinanceModule } from '@/modules/admin/finance/FinanceModule';
 import { HRModule } from '@/modules/admin/hr/HRModule';
 import { SettingsModule } from '@/modules/admin/settings/SettingsModule';
-import { CMSModule } from '@/modules/admin/cms/CMSModule';
+
 import { CompaniesModule } from '@/modules/admin/companies/CompaniesModule';
 import { TasksModule } from '@/modules/admin/tasks/TasksModule';
 import { SectionHeader } from '@/components/admin/shared/AdminShared';
@@ -406,7 +406,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onViewSite,
   onRefresh,
 }) => {
-  const [isCmsOpen, setIsCmsOpen] = useState(true);
+
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { user } = useAuth();
@@ -510,7 +510,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (path.includes('/admin/hr')) return 'Ressources Humaines';
     if (path.includes('/admin/tasks')) return 'Tâches & Projets';
     if (path.includes('/admin/settings')) return 'Paramètres Généraux';
-    if (path.includes('/admin/cms')) return 'Éditeur de contenu';
+
     return 'Tableau de bord';
   };
 
@@ -594,28 +594,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="px-4 py-2 mt-4 mb-1 text-xs font-bold text-slate-600 uppercase tracking-wider">Connectivité & API</div>
           <NavItem to="/admin/webhooks" icon={<Zap />} label="Webhooks & API" companyId={activeCompanyId} permission="admin:read" />
 
-          <div className="px-4 py-2 mt-4 mb-1 text-xs font-bold text-slate-600 uppercase tracking-wider">Gestion du Site Web</div>
-          <button onClick={() => setIsCmsOpen(!isCmsOpen)} className="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800">
-            <div className="flex items-center gap-3">
-              <Globe size={18} />
-              <span>Éditeur CMS</span>
-            </div>
-            <ChevronDown size={14} className={`transition-transform ${isCmsOpen ? 'rotate-180' : ''}`} />
-          </button>
 
-          {isCmsOpen && (
-            <div className="bg-slate-950/50 py-2">
-              <NavItem indent to="/admin/cms/hero" icon={<LayoutDashboard />} label="Accueil (Hero)" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/about" icon={<Building2 />} label="À Propos" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/services" icon={<Package />} label="Services" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/portfolio" icon={<Image />} label="Portfolio" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/stats" icon={<BarChart3 />} label="Chiffres Clés" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/locations" icon={<MapPin />} label="Implantations" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/careers" icon={<Briefcase />} label="Recrutement" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/contact" icon={<Phone />} label="Contact & Infos" companyId={activeCompanyId} permission="site:write" />
-              <NavItem indent to="/admin/cms/seo" icon={<Globe />} label="Référencement SEO" companyId={activeCompanyId} permission="site:write" />
-            </div>
-          )}
         </div>
 
         <div className="p-4 border-t border-slate-800 bg-slate-950">
@@ -689,15 +668,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <Route path="finance" element={<GuardedRoute companyId={activeCompanyId} permission="finance:read" element={<FinanceModule companyId={activeCompanyId} />} />} />
             <Route path="hr" element={<GuardedRoute companyId={activeCompanyId} permission="hr:read" element={<HRModule companyId={activeCompanyId} allCompanies={companies} />} />} />
             <Route path="tasks" element={<GuardedRoute companyId={activeCompanyId} permission="hr:read" element={<TasksModule companyId={activeCompanyId} />} />} />
-            <Route path="cms/hero" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="hero" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/about" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="about" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/services" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="services" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/portfolio" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="portfolio" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/stats" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="stats" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/locations" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="locations" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/careers" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="careers" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/contact" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="contact" data={activeCompany} onUpdate={onUpdate} />} />} />
-            <Route path="cms/seo" element={<GuardedRoute companyId={activeCompanyId} permission="site:write" element={<CMSModule section="seo" data={activeCompany} onUpdate={onUpdate} />} />} />
+
             <Route path="settings" element={<SettingsModule companyId={activeCompanyId} />} />
             <Route path="webhooks" element={<ConnectivitySettings companyId={activeCompanyId} />} />
             <Route path="library" element={<LibraryModule companyId={activeCompanyId} />} />

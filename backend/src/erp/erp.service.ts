@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { AuditService } from '../audit/audit.service';
@@ -1764,6 +1764,21 @@ export class ErpService {
   }
 
   async createTicket(companyId: string, data: any) {
+    // Check if an open ticket already exists for this email
+    if (data.customerEmail) {
+      const activeTicket = await this.prisma.supportTicket.findFirst({
+        where: {
+          companyId,
+          customerEmail: data.customerEmail,
+          status: { in: ['Ouvert', 'En cours', 'En attente'] }
+        }
+      });
+
+      if (activeTicket) {
+        throw new BadRequestException(`Une session est déjà ouverte pour cet email (${activeTicket.reference})`);
+      }
+    }
+
     return this.prisma.supportTicket.create({
       data: {
         ...data,

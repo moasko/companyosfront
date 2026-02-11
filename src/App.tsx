@@ -11,7 +11,7 @@ import { CreateCompanyView } from './modules/admin/companies/CreateCompanyView';
 import { AttendanceKiosk } from './modules/kiosk/AttendanceKiosk';
 import { SupplierPortal } from './modules/admin/stock/components/SupplierPortal';
 import { EmployeePortal } from './modules/kiosk';
-import { useCompanies, useCompanyContent } from './hooks/useAppQueries';
+import { useCompanies } from './hooks/useAppQueries';
 
 function AppContent() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -26,8 +26,8 @@ function AppContent() {
     refetch: refetchCompanies,
   } = useCompanies(isAuthenticated);
 
-  // 2. Fetch Active Company Content
-  const { data: publicCompany, isLoading: contentLoading } = useCompanyContent(activeCompanyId);
+  // 2. Get Active Company from companies list
+  const activeCompany = companies.find((c) => c.id === activeCompanyId);
 
   // Effect 1: Tenant Detection & Selection
   useEffect(() => {
@@ -99,10 +99,6 @@ function AppContent() {
       if (!old) return [];
       return old.map((c) => (c.id === updatedContent.id ? updatedContent : c));
     });
-
-    if (updatedContent.id === activeCompanyId) {
-      queryClient.setQueryData(['companyContent', activeCompanyId], updatedContent);
-    }
   };
 
   const refreshDashboardData = () => {
@@ -115,11 +111,11 @@ function AppContent() {
       <Route
         path="/"
         element={
-          publicCompany ? (
-            <PublicSite content={publicCompany} onAdminClick={() => navigate('/admin')} />
+          activeCompany ? (
+            <PublicSite content={activeCompany} onAdminClick={() => navigate('/admin')} />
           ) : (
             <div className="h-screen flex items-center justify-center bg-white text-slate-500">
-              {companiesLoading || contentLoading ? 'Chargement...' : 'Aucun contenu disponible.'}
+              {companiesLoading ? 'Chargement...' : 'Aucun contenu disponible.'}
             </div>
           )
         }

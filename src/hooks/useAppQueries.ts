@@ -15,12 +15,3 @@ export const useCompanies = (isAuthenticated: boolean) => {
     staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
 };
-
-export const useCompanyContent = (companyId: string) => {
-  return useQuery({
-    queryKey: ['companyContent', companyId],
-    queryFn: (): Promise<SiteContent> => apiFetch(`/cms/${companyId}`),
-    enabled: !!companyId,
-    staleTime: 1000 * 60 * 5,
-  });
-};

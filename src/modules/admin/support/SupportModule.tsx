@@ -36,6 +36,13 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
     const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [newMessage, setNewMessage] = useState('');
+    const [ticketForm, setTicketForm] = useState({
+        subject: '',
+        category: 'Technique',
+        priority: 'Moyenne',
+        customerName: '',
+        customerEmail: ''
+    });
 
     const { data: tickets = [], isLoading } = useQuery<Ticket[]>({
         queryKey: ['tickets', companyId],
@@ -53,9 +60,20 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
             method: 'POST',
             body: JSON.stringify(data)
         }),
-        onSuccess: () => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['tickets', companyId] });
             setIsCreateModalOpen(false);
+            setTicketForm({
+                subject: '',
+                category: 'Technique',
+                priority: 'Moyenne',
+                customerName: '',
+                customerEmail: ''
+            });
+            if (data?.id) setSelectedTicketId(data.id);
+        },
+        onError: (error: any) => {
+            alert(error.message || "Une erreur est survenue lors de la création du ticket");
         }
     });
 
@@ -82,6 +100,11 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
         }
     });
 
+    const handleCreateTicket = () => {
+        if (!ticketForm.subject || !ticketForm.customerEmail) return;
+        createTicketMutation.mutate(ticketForm);
+    };
+
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
         addMessageMutation.mutate({
@@ -94,7 +117,7 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
     const getPriorityColor = (p: string) => {
         switch (p) {
             case 'Urgent': return 'red';
-            case 'Haute': return 'orange';
+            case 'Haute': return 'amber';
             case 'Moyenne': return 'blue';
             default: return 'slate';
         }
@@ -103,7 +126,7 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
     const getStatusColor = (s: string) => {
         switch (s) {
             case 'Ouvert': return 'blue';
-            case 'En cours': return 'orange';
+            case 'En cours': return 'amber';
             case 'En attente': return 'amber';
             case 'Fermé': return 'green';
             default: return 'slate';
@@ -270,16 +293,31 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
                 footer={
                     <div className="flex justify-end gap-3 w-full">
                         <button onClick={() => setIsCreateModalOpen(false)} className="px-6 py-2.5 text-slate-500 font-bold hover:bg-slate-100">Annuler</button>
-                        <button className="px-8 py-2.5 bg-slate-900 text-white font-black uppercase tracking-widest rounded-sm shadow-xl active:scale-95">Créer le ticket</button>
+                        <button
+                            onClick={handleCreateTicket}
+                            disabled={createTicketMutation.isPending || !ticketForm.subject || !ticketForm.customerEmail}
+                            className="px-8 py-2.5 bg-slate-900 text-white font-black uppercase tracking-widest rounded-sm shadow-xl active:scale-95 disabled:opacity-50"
+                        >
+                            {createTicketMutation.isPending ? 'Création...' : 'Créer le ticket'}
+                        </button>
                     </div>
                 }
             >
                 <div className="space-y-4">
-                    <InputField label="Sujet de la demande" placeholder="Ex: Panne de serveur Riviera 3" />
+                    <InputField
+                        label="Sujet de la demande"
+                        placeholder="Ex: Panne de serveur Riviera 3"
+                        value={ticketForm.subject}
+                        onChange={(val) => setTicketForm(prev => ({ ...prev, subject: val }))}
+                    />
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Catégorie</label>
-                            <select className="w-full p-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold outline-none">
+                            <select
+                                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold outline-none"
+                                value={ticketForm.category}
+                                onChange={(e) => setTicketForm(prev => ({ ...prev, category: e.target.value }))}
+                            >
                                 <option>Technique</option>
                                 <option>Facturation</option>
                                 <option>Commercial</option>
@@ -288,7 +326,11 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Priorité</label>
-                            <select className="w-full p-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold outline-none">
+                            <select
+                                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold outline-none"
+                                value={ticketForm.priority}
+                                onChange={(e) => setTicketForm(prev => ({ ...prev, priority: e.target.value }))}
+                            >
                                 <option>Moyenne</option>
                                 <option>Basse</option>
                                 <option>Haute</option>
@@ -296,8 +338,18 @@ export const SupportModule: React.FC<{ companyId: string }> = ({ companyId }) =>
                             </select>
                         </div>
                     </div>
-                    <InputField label="Nom du Client" placeholder="Ex: Jean Dupont" />
-                    <InputField label="Email de contact" placeholder="client@email.com" />
+                    <InputField
+                        label="Nom du Client"
+                        placeholder="Ex: Jean Dupont"
+                        value={ticketForm.customerName}
+                        onChange={(val) => setTicketForm(prev => ({ ...prev, customerName: val }))}
+                    />
+                    <InputField
+                        label="Email de contact"
+                        placeholder="client@email.com"
+                        value={ticketForm.customerEmail}
+                        onChange={(val) => setTicketForm(prev => ({ ...prev, customerEmail: val }))}
+                    />
                 </div>
             </Modal>
         </div>

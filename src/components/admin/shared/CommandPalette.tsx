@@ -42,12 +42,6 @@ const NAVIGATION_ITEMS = [
     path: '/admin/tasks',
   },
   {
-    id: 'nav-cms',
-    label: 'Éditeur de site (CMS)',
-    icon: <Globe size={18} />,
-    path: '/admin/cms/hero',
-  },
-  {
     id: 'nav-settings',
     label: 'Paramètres',
     icon: <Settings size={18} />,

@@ -189,106 +189,6 @@ model RolePermission {
     @@unique([roleId, permissionId])
 }
 
-model Seo {
-    id              String   @id @default(cuid())
-    metaTitle       String
-    metaDescription String
-    metaKeywords    String
-    ogImage         String?
-    createdAt       DateTime @default(now())
-    updatedAt       DateTime @updatedAt
-}
-
-model Hero {
-    id        String   @id @default(cuid())
-    title     String
-    subtitle  String
-    tagline   String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    imageUrl  String?
-}
-
-model About {
-    id          String   @id @default(cuid())
-    title       String
-    description String
-    vision      String
-    mission     String
-    values      String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-}
-
-model Contact {
-    id        String   @id @default(cuid())
-    email     String
-    phone     String
-    address   String
-    hours     String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model Careers {
-    id           String       @id @default(cuid())
-    title        String
-    subtitle     String
-    description  String
-    contactEmail String
-    createdAt    DateTime     @default(now())
-    updatedAt    DateTime     @updatedAt
-    jobOpenings  JobOpening[]
-}
-
-model Realizations {
-    id        String        @id @default(cuid())
-    works     String[]
-    createdAt DateTime      @default(now())
-    updatedAt DateTime      @updatedAt
-    clients   String[]
-    gallery   GalleryItem[]
-}
-
-model GalleryItem {
-    id             String       @id @default(cuid())
-    caption        String
-    category       String
-    imageUrl       String?
-    realizationsId String
-    createdAt      DateTime     @default(now())
-    updatedAt      DateTime     @updatedAt
-    realizations   Realizations @relation(fields: [realizationsId], references: [id])
-}
-
-model Stat {
-    id        String   @id @default(cuid())
-    value     String
-    label     String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model Location {
-    id        String   @id @default(cuid())
-    country   String
-    flag      String
-    year      String
-    status    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model Service {
-    id          String   @id @default(cuid())
-    title       String
-    description String
-    iconName    String
-    features    String[]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-}
-
 model StockItem {
     id                 String              @id @default(cuid())
     type               String
@@ -512,11 +412,9 @@ model JobOpening {
     type        String
     description String
     status      String
-    careersId   String
     companyId   String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    careers     Careers  @relation(fields: [careersId], references: [id])
     company     Company  @relation(fields: [companyId], references: [id])
 }
 
