@@ -11,8 +11,6 @@ WORKFLOWS.md
 .eslintrc.cjs
 .prettierrc
 package-lock.json
-tsconfig.json
-vite.config.ts
 src/**/*.test.ts
 src/**/*.test.tsx
 src/**/*.spec.ts
