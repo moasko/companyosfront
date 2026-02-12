@@ -6,6 +6,8 @@ WORKDIR /app
 
 # Copier les fichiers de configuration
 COPY package*.json ./
+COPY tsconfig.json .
+COPY vite.config.ts .
 
 # Installer les dépendances
 RUN npm install && npm cache clean --force
