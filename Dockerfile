@@ -8,13 +8,16 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installer les dépendances
-RUN npm install --production && npm cache clean --force
+RUN npm install && npm cache clean --force
 
 # Copier tous les fichiers sources
 COPY . .
 
 # Build l'application
 RUN npm run build
+
+# Suppression des dépendances de développement pour réduire la taille
+RUN npm prune --production
 
 # Étape de production
 FROM nginx:alpine
