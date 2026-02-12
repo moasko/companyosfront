@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
+  const isProduction = mode === 'production';
+  
   return {
     server: {
       port: 3001,
@@ -11,6 +13,20 @@ export default defineConfig(({ mode }) => {
       allowedHosts: [
         "russel-unclinging-incalculably.ngrok-free.dev"
       ]
+    },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom'],
+            charts: ['recharts'],
+            utils: ['date-fns', 'lucide-react']
+          }
+        }
+      }
     },
     plugins: [react()],
     define: {

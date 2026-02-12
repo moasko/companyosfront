@@ -35,7 +35,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       // We need to pass the Bearer token manually if apiFetch doesn't handle FormData well
       const token = localStorage.getItem('auth_token');
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/upload`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/upload`,
         {
           method: 'POST',
           headers: {
@@ -48,7 +48,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       if (!response.ok) throw new Error('Upload failed');
 
       const data = await response.json();
-      const fullUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${data.url}`;
+      const fullUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${data.url}`;
       onChange(fullUrl);
       setStatus('success');
       setTimeout(() => setStatus('idle'), 3000);

@@ -33,9 +33,9 @@ import {
 const data = [
     { month: 'Jan', revenue: 4500000, expenses: 3200000, profit: 1300000 },
     { month: 'Feb', revenue: 5200000, expenses: 3500000, profit: 1700000 },
-    { month: 'Mar', revenue: 4800000, expenses: 3100000, profit: 1700000 },
+    { month: 'Mar', revenue: 4300000, expenses: 3100000, profit: 1700000 },
     { month: 'Apr', revenue: 6100000, expenses: 4200000, profit: 1900000 },
-    { month: 'May', revenue: 5500000, expenses: 3800000, profit: 1700000 },
+    { month: 'May', revenue: 5500000, expenses: 3300000, profit: 1700000 },
     { month: 'Jun', revenue: 7200000, expenses: 4500000, profit: 2700000 },
 ];
 
