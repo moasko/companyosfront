@@ -1,7 +1,6 @@
 // @ts-ignore
 const API_BASE_URL =
-  (import.meta as any).env?.VITE_API_URL ||
-  'https://enea-os-companyos-rdxrej-be81c3-168-231-103-225.traefik.me';
+  (import.meta as any).env?.VITE_API_URL ||'localhost:8000';
 
 export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('auth_token');
