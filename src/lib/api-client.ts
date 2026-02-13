@@ -1,6 +1,6 @@
 // @ts-ignore
 const API_BASE_URL =
-  (import.meta as any).env?.VITE_API_URL ||'localhost:8000';
+  (import.meta as any).env?.VITE_API_URL ||'http://localhost:8000';
 
 export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('auth_token');
